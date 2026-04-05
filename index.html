@@ -391,46 +391,48 @@ function toggleTheme(){document.body.classList.toggle("dark");document.body.clas
   <!-- SUBMENU -->
   <div class="moreMenu" id="moreMenu">
 
-    <!-- WEB SEARCH -->
-    <button>
-      <svg viewBox="0 0 24 24">
-        <circle cx="12" cy="12" r="10"/>
-        <path d="M2 12h20"/>
-        <path d="M12 2a15 15 0 010 20"/>
-      </svg>
-      Web Search
-    </button>
+  <!-- WEB SEARCH (same - already good) -->
+  <button>
+    <svg viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="10"/>
+      <path d="M2 12h20"/>
+      <path d="M12 2a15 15 0 010 20"/>
+    </svg>
+    Web Search
+  </button>
 
-    <!-- CANVAS -->
-    <button>
-      <svg viewBox="0 0 24 24">
-        <rect x="3" y="3" width="18" height="18"/>
-        <path d="M3 9h18"/>
-        <path d="M9 21V9"/>
-      </svg>
-      Canvas
-    </button>
+  <!-- CANVAS (grid style clean) -->
+  <button>
+    <svg viewBox="0 0 24 24">
+      <rect x="3" y="3" width="8" height="8"/>
+      <rect x="13" y="3" width="8" height="8"/>
+      <rect x="3" y="13" width="8" height="8"/>
+      <rect x="13" y="13" width="8" height="8"/>
+    </svg>
+    Canvas
+  </button>
 
-    <!-- QUIZZES -->
-    <button>
-      <svg viewBox="0 0 24 24">
-        <rect x="3" y="3" width="18" height="18"/>
-        <path d="M9 7h6M9 11h4"/>
-      </svg>
-      Quizzes
-    </button>
+  <!-- QUIZZES (checklist style) -->
+  <button>
+    <svg viewBox="0 0 24 24">
+      <path d="M9 7h10M9 12h10M9 17h10"/>
+      <path d="M5 7l1.5 1.5L8 6"/>
+      <path d="M5 12l1.5 1.5L8 11"/>
+      <path d="M5 17l1.5 1.5L8 16"/>
+    </svg>
+    Quizzes
+  </button>
 
-    <!-- STUDY -->
-    <button>
-      <svg viewBox="0 0 24 24">
-        <path d="M4 19h16"/>
-        <path d="M6 17V5a2 2 0 012-2h8a2 2 0 012 2v12"/>
-        <path d="M9 9h6M9 13h4"/>
-      </svg>
-      Study & Learn
-    </button>
+  <!-- STUDY & LEARN (book style clean) -->
+  <button>
+    <svg viewBox="0 0 24 24">
+      <path d="M4 6a2 2 0 012-2h10a2 2 0 012 2v14a1 1 0 01-1.5.9L12 18l-4.5 2.9A1 1 0 016 20V6z"/>
+      <path d="M8 8h6M8 12h6"/>
+    </svg>
+    Study & Learn
+  </button>
 
-  </div>
+</div>
 </div>
 
 <style>
