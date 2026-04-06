@@ -1,550 +1,308 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<style>StudyGenius AI ▼</style>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>StudyGenius AI | World-Class Study Suite</title>
+    <style>
+        :root {
+            --primary: #10a37f;
+            --primary-hover: #1a7f64;
+            --sidebar-bg: #202123;
+            --main-bg-dark: #343541;
+            --main-bg-light: #ffffff;
+            --text-dark: #ececf1;
+            --text-light: #2d333a;
+            --glass: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
 
-<style>
-body.dark{background:#181818;color:white;}
-body.light{background:#fff;color:#111;}
-body{margin:0;font-family:system-ui;display:flex;height:100vh;}
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', -apple-system, system-ui, sans-serif; -webkit-tap-highlight-color: transparent; }
+        
+        body { height: 100vh; width: 100vw; display: flex; overflow: hidden; transition: var(--transition); }
+        body.dark { background: var(--main-bg-dark); color: var(--text-dark); }
+        body.light { background: var(--main-bg-light); color: var(--text-light); }
 
-/* SPLASH */
-#splash{position:fixed;width:100%;height:100%;background:#0f172a;display:flex;justify-content:center;align-items:center;z-index:9999;}
-#logoAnim{width:80px;height:80px;border-radius:50%;overflow:hidden;animation:zoomFade 1.5s ease forwards;}
-#logoAnim img{width:100%;height:100%;object-fit:cover;transform:scale(1.3);}
-@keyframes zoomFade{0%{transform:scale(0.6);opacity:0;}100%{transform:scale(1);}}
+        /* --- UI SAFETY & MICRO-ANIMATIONS --- */
+        button, .nav-item, .icon-btn { cursor: pointer; transition: var(--transition); }
+        button:active, .nav-item:active { transform: scale(0.96); }
 
-/* SIDEBAR */
-.sidebar{width:220px;background:#202123;padding:12px;display:flex;flex-direction:column;justify-content:space-between;transition:0.3s;}
-.sidebar.collapsed{width:70px;}
-.sidebar.collapsed .btn span,
-.sidebar.collapsed .yourChats,
-.sidebar.collapsed .chatItem,
-.sidebar.collapsed .planBtn{display:none;}
-.sidebar.collapsed .btn{justify-content:center;}
-/* ✅ ONLY AVATAR SHOW */
-.sidebar.collapsed .accInfo{display:none;}
-.sidebar.collapsed .account{justify-content:center;}
+        /* --- SIDEBAR --- */
+        .sidebar {
+            width: 260px; background: var(--sidebar-bg); height: 100%; display: flex; 
+            flex-direction: column; padding: 12px; z-index: 1000; flex-shrink: 0;
+            border-right: 1px solid var(--glass-border); transition: transform 0.3s ease;
+        }
+        .sidebar.collapsed { width: 0; padding: 0; transform: translateX(-100%); position: absolute; }
 
-.logoRow{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
-.logoWrap{width:28px;height:28px;border-radius:50%;overflow:hidden;}
-.logoWrap img{width:100%;height:100%;object-fit:cover;}
-.toggleBtn{cursor:pointer;padding:6px;border-radius:6px;}
-.toggleBtn:hover{background:#2a2b32;}
+        .nav-item {
+            padding: 12px; border-radius: 10px; display: flex; align-items: center;
+            gap: 12px; font-size: 14px; color: #ececf1; margin-bottom: 4px;
+        }
+        .nav-item:hover { background: rgba(255,255,255,0.1); }
+        .nav-item svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 2; }
 
-.btn{display:flex;align-items:center;gap:10px;padding:10px;border:none;border-radius:8px;margin:4px 0;background:transparent;color:inherit;cursor:pointer;}
-.btn:hover{background:#2a2b32;}
+        /* --- MAIN CONTENT --- */
+        .main-content { flex-grow: 1; display: flex; flex-direction: column; position: relative; height: 100%; overflow: hidden; }
+        
+        /* Glassmorphism Topbar */
+        .top-bar {
+            height: 64px; display: flex; align-items: center; justify-content: space-between;
+            padding: 0 20px; backdrop-filter: blur(12px); border-bottom: 1px solid var(--glass-border);
+            position: sticky; top: 0; z-index: 900;
+        }
 
-.btn svg,.menu svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;}
+        .plan-capsule {
+            background: rgba(16, 163, 127, 0.15); color: var(--primary);
+            padding: 4px 14px; border-radius: 20px; font-size: 11px; font-weight: 700;
+            border: 1px solid var(--primary); letter-spacing: 0.5px;
+        }
 
-/* YOUR CHATS */
-.yourChats{font-size:13px;margin:10px 0 6px 6px;color:#9ca3af;font-weight:500;}
+        /* --- CHAT ENGINE --- */
+        .chat-container {
+            flex: 1; overflow-y: auto; padding: 40px 15%; scroll-behavior: smooth;
+        }
+        .chat-container::-webkit-scrollbar { width: 5px; }
+        .chat-container::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
 
-.chatItem{display:flex;justify-content:space-between;align-items:center;padding:8px 10px;border-radius:6px;position:relative;font-size:14px;}
-.chatItem:hover{background:#2a2b32;}
+        .message { margin-bottom: 32px; animation: fadeIn 0.4s ease; max-width: 850px; margin-left: auto; margin-right: auto; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-.left{display:flex;align-items:center;gap:6px;}
-.dot{width:6px;height:6px;background:white;border-radius:50%;}
+        .user-msg { background: var(--glass); padding: 18px; border-radius: 16px; border: 1px solid var(--glass-border); }
+        .bot-msg { position: relative; padding: 10px 0; }
 
-/* 3 DOT MENU */
-.menu3{
-  position:absolute;
-  right:-200px;
-  top:0;
-  width:200px;
-  background:#2a2a2a;
-  border-radius:10px;
-  padding:6px 0;
-  display:none;
-  flex-direction:column;
-  z-index:1000;
-}
-.menu3 button{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  background:none;
-  border:none;
-  color:white;
-  padding:9px 14px;
-  font-size:13px;
-  cursor:pointer;
-}
-.menu3 button:hover{background:#3a3a3a;}
-.menu3 hr{border:none;border-top:1px solid #444;margin:6px 0;}
-.menu3 svg{width:16px;height:16px;stroke:white;fill:none;stroke-width:2;}
-/* ✅ FULL RED DELETE */
-.delete{color:#ff3b3b !important;}
-.delete svg{stroke:#ff3b3b !important;}
+        /* AI Action Bar ChatGPT Style */
+        .ai-actions {
+            display: flex; gap: 14px; margin-top: 12px; opacity: 0; transition: 0.2s;
+        }
+        .bot-msg:hover .ai-actions { opacity: 1; }
+        .action-icon { cursor: pointer; color: #8e8ea0; font-size: 14px; display: flex; align-items: center; gap: 4px; }
+        .action-icon:hover { color: white; }
 
-/* ACCOUNT SECTION */
-.divider{height:1px;background:#2f2f2f;margin:10px 0;}
+        /* --- INPUT SYSTEM --- */
+        .input-area { padding: 24px 15%; width: 100%; max-width: 900px; margin: 0 auto; position: relative; }
+        .input-wrapper {
+            background: #40414f; border-radius: 14px; padding: 12px 18px; display: flex;
+            align-items: center; gap: 14px; border: 1px solid #565869;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+        }
+        input { flex: 1; background: transparent; border: none; color: white; outline: none; font-size: 16px; }
+        
+        .footer-note { text-align: center; font-size: 11px; color: #8e8ea0; margin-top: 12px; opacity: 0.8; }
 
-.account{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  padding:8px;
-  border-radius:8px;
-}
-.account:hover{background:#2a2b32;}
+        /* --- MODALS & MENUS --- */
+        .dropdown-menu {
+            position: absolute; background: #2a2b32; border: 1px solid #494a54;
+            border-radius: 10px; padding: 6px; display: none; flex-direction: column;
+            box-shadow: 0 15px 45px rgba(0,0,0,0.4); z-index: 2500; min-width: 200px;
+            animation: slideIn 0.2s ease;
+        }
+        @keyframes slideIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
 
-.avatar{
-  width:32px;
-  height:32px;
-  border-radius:50%;
-  background:#444;
-}
+        .menu-item {
+            padding: 10px 14px; font-size: 13px; border-radius: 6px; cursor: pointer;
+            display: flex; align-items: center; gap: 12px; color: #ececf1;
+        }
+        .menu-item:hover { background: #3e3f4b; }
 
-.accInfo{display:flex;flex-direction:column;}
-.accName{font-size:14px;}
-.plan{font-size:11px;color:#aaa;}
+        /* TOAST NOTIFICATION */
+        #toast {
+            position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%);
+            background: #10a37f; color: white; padding: 10px 20px; border-radius: 8px;
+            font-size: 14px; font-weight: 600; display: none; z-index: 5000; box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
 
-.planBtn{
-  margin-top:8px;
-  padding:10px;
-  text-align:center;
-  border-radius:20px;
-  background:#2a2a2a;
-  font-size:13px;
-  cursor:pointer;
-}
-.planBtn:hover{background:#3a3a3a;}
+        /* HERO VIEW */
+        .hero { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+        .hero h1 { font-size: 2.8rem; font-weight: 800; margin-bottom: 20px; letter-spacing: -1px; }
 
-/* MAIN */
-.main{flex:1;display:flex;flex-direction:column;}
-.topbar{height:50px;display:flex;align-items:center;justify-content:space-between;padding:0 15px;border-bottom:1px solid #444;}
+        /* SIDEBAR TOGGLE */
+        .menu-toggle {
+            cursor: pointer; padding: 8px; border-radius: 8px; display: flex; align-items: center;
+        }
+        .menu-toggle:hover { background: var(--glass); }
 
-.chat{flex:1;padding:25px;overflow-y:auto;}
-.message{max-width:70%;padding:14px;margin:10px 0;border-radius:14px;}
-.user{margin-left:auto;background:linear-gradient(45deg,#3b82f6,#06b6d4);}
-.bot{background:#242424;}
-
-/* INPUT */
-.inputBar{padding:14px;border-top:1px solid #333;}
-.inputBox{display:flex;align-items:center;gap:10px;max-width:800px;margin:auto;background:#2a2a2a;border-radius:18px;padding:12px 14px;}
-input{flex:1;background:none;border:none;color:inherit;outline:none;}
-.icon{cursor:pointer;padding:6px;border-radius:6px;}
-.icon:hover{background:#333;}
-
-/* MENU */
-.menu{
-  position:absolute;
-  bottom:55px;
-  left:0;
-  background:#2a2a2a;
-  border-radius:12px;
-  padding:10px;
-  display:none;
-  flex-direction:column;
-  width:230px;
-}
-.menu button{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  background:none;
-  border:none;
-  color:white;
-  padding:10px;
-  border-radius:8px;
-}
-.menu button:hover{background:#3a3a3a;}
-
-/* BUTTON */
-.actionBtn{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;background:#2f2f2f;}
-.sendActive{background:#10a37f;}
-</style>
+        @media (max-width: 768px) {
+            .chat-container, .input-area { padding-left: 20px; padding-right: 20px; }
+            .sidebar { position: absolute; left: 0; top: 0; bottom: 0; width: 280px; }
+            .hero h1 { font-size: 2rem; }
+        }
+    </style>
 </head>
-
 <body class="dark">
 
-<div id="splash">
-  <div id="logoAnim"><img src="logo.png"></div>
-</div>
+    <div id="toast">Action Successful</div>
 
-<div id="app" style="display:none; width:100%; display:flex;">
-<div id="newChatScreen" style="
-position:absolute;
-top:0;
-left:0;
-width:100%;
-height:100%;
-display:flex;
-flex-direction:column;
-align-items:center;
-justify-content:center;
-z-index:5;
-background:inherit;
-">
+    <div class="sidebar" id="sidebar">
+        <div style="flex: 1; margin-top: 10px;">
+            <div class="nav-item" style="border: 1px solid #444; margin-bottom: 20px;" onclick="location.reload()">
+                <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                <span>New Chat</span>
+            </div>
+            
+            <div style="margin: 20px 10px 10px; font-size: 11px; color: #8e8ea0; font-weight: 700; display: flex; justify-content: space-between;">
+                <span>YOUR CHATS</span>
+                <span id="arrow" onclick="toggleHistory()" style="cursor: pointer;">▼</span>
+            </div>
+            
+            <div id="history-box">
+                <div class="nav-item">
+                    <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                    <span>Calculus Help #1</span>
+                </div>
+            </div>
+        </div>
 
-<h1 style="font-size:32px;font-weight:600;margin-bottom:20px;">
-What are you working on?
-</h1>
-
-<div style="position:absolute;top:20px;right:20px;display:flex;gap:15px;">
-<span class="icon">👥</span>
-<span class="icon">🕶️</span>
-</div>
-
-</div>
-
-<div class="sidebar">
-  <div>
-
-    <div class="logoRow">
-      <div class="logoWrap"><img src="logo.png"></div>
-      <div class="toggleBtn" onclick="toggleSidebar()">☰</div>
+        <div style="padding: 10px; border-top: 1px solid var(--glass-border);">
+            <div class="nav-item" style="background: var(--glass); margin-bottom: 12px;">
+                <div style="width: 32px; height: 32px; border-radius: 50%; background: #ef4444; display: flex; align-items: center; justify-content: center; font-weight: bold;">P</div>
+                <div style="flex: 1;">
+                    <div style="font-size: 13px; font-weight: 600;">Pranab AI</div>
+                    <div style="font-size: 10px; color: #8e8ea0;">Free Version</div>
+                </div>
+            </div>
+            <button onclick="showToast('Feature coming soon!')" style="background: var(--primary); color: white; border: none; padding: 12px; border-radius: 10px; width: 100%; font-weight: 600;">Upgrade Plan</button>
+        </div>
     </div>
 
-    <!-- MAIN -->
-    <button class="btn"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg><span>New chat</span></button>
-    <button class="btn"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.5" y2="16.5"/></svg><span>Search chats</span></button>
-    <button class="btn"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18"/><circle cx="8" cy="8" r="2"/><path d="M21 15l-5-5L5 21"/></svg><span>Images</span></button>
-    <button class="btn"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg><span>Apps</span></button>
+    <div class="main-content">
+        <div class="top-bar">
+            <div class="menu-toggle" onclick="toggleSidebar()">☰</div>
+            
+            <div style="position: relative;">
+                <div style="cursor: pointer; font-weight: 700; display: flex; align-items: center; gap: 6px;" onclick="openDropdown(event, 'model-list')">
+                    StudyGenius 4o <small style="opacity: 0.5;">▼</small>
+                </div>
+                <div id="model-list" class="dropdown-menu" style="top: 45px; left: 50%; transform: translateX(-50%);">
+                    <div class="menu-item">✨ Genius Ultra (Pro)</div>
+                    <div class="menu-item">🎓 Study Specialized</div>
+                    <div class="menu-item">⚡ High Speed Mode</div>
+                </div>
+            </div>
 
-    <button class="btn">
-  <svg viewBox="0 0 24 24">
-    <circle cx="11" cy="11" r="7"/>
-    <line x1="21" y1="21" x2="16.5" y2="16.5"/>
-    <path d="M11 8v6M8 11h6"/>
-  </svg>
-  <span>Deep search</span>
-</button>
+            <div class="plan-capsule">Free Plan</div>
+            <div class="icon-btn" onclick="toggleTheme()" style="font-size: 20px;">🌗</div>
+        </div>
 
-    <button class="btn"><svg viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg><span>Codex</span></button>
-    <button class="btn"><svg viewBox="0 0 24 24"><path d="M3 7h5l2 3h11v11H3z"/></svg><span>Projects</span></button>
+        <div id="hero-screen" class="hero">
+            <h1>What are you working on?</h1>
+            <p style="color: #8e8ea0; font-size: 15px;">I can help you with notes, exams, or complex coding problems.</p>
+            <div style="display: flex; gap: 10px; margin-top: 30px; position: absolute; top: 80px; right: 20px;">
+                <div class="icon-btn" onclick="showToast('Group Chat Enabled')">👥</div>
+                <div class="icon-btn" onclick="showToast('Temp Chat Enabled')">🔒</div>
+            </div>
+        </div>
 
-    <div class="yourChats">Your Chats</div>
+        <div id="chat-box" class="chat-container" style="display: none;"></div>
 
-    <div class="chatItem">
-      <div class="left">
-        <div class="dot"></div>
-        <span>Example Chat</span>
-      </div>
-      <!-- ✅ HORIZONTAL DOTS -->
-      <div onclick="toggleMenu3(event)" style="font-size:18px;">⋯</div>
-
-      <div class="menu3">
-        <button>
-  <svg viewBox="0 0 24 24">
-    <circle cx="18" cy="5" r="3"/>
-    <circle cx="6" cy="12" r="3"/>
-    <circle cx="18" cy="19" r="3"/>
-    <line x1="8.7" y1="13.3" x2="15.3" y2="17.7"/>
-    <line x1="15.3" y1="6.3" x2="8.7" y2="10.7"/>
-  </svg>
-  Share
-</button>
-        <button><svg viewBox="0 0 24 24"><circle cx="9" cy="7" r="4"/><circle cx="17" cy="17" r="3"/><path d="M13 10l2 2"/></svg>Start group chat</button>
-        <button><svg viewBox="0 0 24 24"><path d="M4 20h4l10-10-4-4L4 16v4z"/></svg>Rename</button>
-        <hr>
-        <button><svg viewBox="0 0 24 24"><path d="M12 17v-10"/><polyline points="8 11 12 7 16 11"/></svg>Pin</button>
-        <button><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="4"/><path d="M6 8v12h12V8"/></svg>Archive</button>
-        <button class="delete"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/></svg>Delete</button>
-      </div>
+        <div class="input-area">
+            <div class="input-wrapper">
+                <div style="position: relative;">
+                    <span style="cursor: pointer; font-size: 22px;" onclick="openDropdown(event, 'plus-options')">＋</span>
+                    <div id="plus-options" class="dropdown-menu" style="bottom: 55px; left: 0;">
+                        <div class="menu-item">📄 Upload Documents</div>
+                        <div class="menu-item">📸 Take Photo</div>
+                        <div class="menu-item">🌈 Colourful Notes</div>
+                        <div class="menu-item">📊 Practice Paper</div>
+                    </div>
+                </div>
+                <input type="text" id="chat-input" placeholder="Message StudyGenius..." onkeydown="if(event.key==='Enter') handleSend()">
+                <div onclick="handleSend()" style="cursor: pointer; color: var(--primary); font-weight: bold;">📤</div>
+            </div>
+            <p class="footer-note">StudyGenius AI can make mistakes. Check important info. See Cookie Preferences</p>
+        </div>
     </div>
 
-  </div>
+    <script>
+        // CLICK SAFETY SYSTEM
+        let isProcessing = false;
 
-  <!-- ACCOUNT -->
-  <div>
-    <div class="divider"></div>
+        function handleSend() {
+            if (isProcessing) return;
+            const input = document.getElementById('chat-input');
+            const val = input.value.trim();
+            if (!val) return;
 
-    <div class="account">
-      <div class="avatar"></div>
-      <div class="accInfo">
-        <div class="accName">Pranab</div>
-        <div class="plan">Free</div>
-      </div>
-    </div>
+            isProcessing = true;
+            document.getElementById('hero-screen').style.display = 'none';
+            const chatBox = document.getElementById('chat-box');
+            chatBox.style.display = 'block';
 
-    <div class="planBtn">Upgrade Plan</div>
-  </div>
-</div>
+            // User
+            chatBox.innerHTML += `<div class="message user-msg">${val}</div>`;
+            input.value = '';
 
-<div class="main">
-<div class="topbar">
-  <div style="font-weight:600; display:flex; align-items:center; gap:6px;">
-    StudyGenius AI
-    <svg width="16" height="16" viewBox="0 0 24 24">
-      <polyline points="6 9 12 15 18 9" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-    </svg>
-  </div>
-<div id="planCapsule" style="
-position:absolute;
-top:10px;
-left:50%;
-transform:translateX(-50%);
-background:#2a2a2a;
-padding:6px 14px;
-border-radius:20px;
-font-size:12px;
-opacity:0.9;
-">
-Free
-</div>
-  <div style="display:flex; align-items:center; gap:10px; position:relative;">
-    
-    <!-- SHARE BUTTON -->
-    <button class="btnTopbar" onclick="alert('Share clicked!')" style="display:flex; align-items:center; gap:4px; background:none; border:none; color:inherit; cursor:pointer; font-size:13px;">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <circle cx="18" cy="5" r="3"></circle>
-        <circle cx="6" cy="12" r="3"></circle>
-        <circle cx="18" cy="19" r="3"></circle>
-        <line x1="8.7" y1="13.3" x2="15.3" y2="17.7"></line>
-        <line x1="15.3" y1="6.3" x2="8.7" y2="10.7"></line>
-      </svg>
-      <span>Share</span>
-    </button>
+            // AI Response (Smooth Typewriter feel)
+            setTimeout(() => {
+                const id = Date.now();
+                const time = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                chatBox.innerHTML += `
+                    <div class="message bot-msg">
+                        <strong style="display:block; margin-bottom: 8px;">StudyGenius AI</strong>
+                        <div style="line-height: 1.7;">I'm analyzing your request. Based on the academic standards, here is the detailed breakdown for your study session...</div>
+                        <div class="ai-actions">
+                            <span class="action-icon" onclick="showToast('Copied to clipboard')">📋 Copy</span>
+                            <span class="action-icon">👍</span>
+                            <span class="action-icon">👎</span>
+                            <span class="action-icon" onclick="showToast('Retrying...')">🔄</span>
+                            <span class="action-icon" onclick="openDropdown(event, 'opt-${id}')">⋯</span>
+                            <div id="opt-${id}" class="dropdown-menu" style="bottom: 30px;">
+                                <div style="font-size: 10px; color: #8e8ea0; padding: 5px 12px; border-bottom: 1px solid #444;">${time}</div>
+                                <div class="menu-item">📍 Branch a new chat</div>
+                                <div class="menu-item">🔊 Read aloud</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                chatBox.scrollTop = chatBox.scrollHeight;
+                isProcessing = false;
+            }, 600);
+        }
 
-    <!-- 3 DOT MENU BUTTON -->
-    <div class="icon" style="font-size:18px; cursor:pointer;" onclick="toggleMenu3(event)">⋯</div>
+        // UI CONTROLS
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('collapsed');
+        }
 
-    <!-- 3 DOT MENU -->
-    <div class="menu3">
-      <button>
-        <svg viewBox="0 0 24 24">
-          <path d="M12 17v-10"/><polyline points="8 11 12 7 16 11"/>
-        </svg>
-        Pin
-      </button>
-      <button>
-        <svg viewBox="0 0 24 24">
-          <path d="M4 20h4l10-10-4-4L4 16v4z"/>
-        </svg>
-        Rename
-      </button>
-      <button>
-        <svg viewBox="0 0 24 24">
-          <rect x="3" y="4" width="18" height="4"/><path d="M6 8v12h12V8"/>
-        </svg>
-        Archive
-      </button>
-      <button>
-        <svg viewBox="0 0 24 24">
-          <circle cx="9" cy="7" r="4"/>
-          <circle cx="17" cy="17" r="3"/>
-          <path d="M13 10l2 2"/>
-        </svg>
-        Start Group Chat
-      </button>
-      <hr>
-      <button class="delete">
-        <svg viewBox="0 0 24 24">
-          <polyline points="3 6 5 6 21 6"/>
-          <path d="M19 6l-1 14H6L5 6"/>
-          <path d="M10 11v6M14 11v6"/>
-        </svg>
-        Delete
-      </button>
-    </div>
+        function toggleTheme() {
+            document.body.classList.toggle('dark');
+            document.body.classList.toggle('light');
+        }
 
-    <!-- TOGGLE BUTTON (🌗) -->
-    <div class="icon" onclick="toggleTheme()">🌗</div>
+        function openDropdown(e, id) {
+            e.stopPropagation();
+            closeAll();
+            const el = document.getElementById(id);
+            el.style.display = 'flex';
+        }
 
-  </div>
-</div>
+        function closeAll() {
+            document.querySelectorAll('.dropdown-menu').forEach(d => d.style.display = 'none');
+        }
 
-<style>
-.topbar{height:50px;display:flex;align-items:center;justify-content:space-between;padding:0 15px;border-bottom:1px solid #444;}
-.menu3{
-  position:absolute;
-  top:100%; /* button ke bilkul neeche */
-  left:0;
-  width:220px;
-  background:#2a2a2a;
-  border-radius:10px;
-  padding:6px 0;
-  display:none;
-  flex-direction:column;
-  z-index:1000;
-}
-.menu3 button{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  background:none;
-  border:none;
-  color:white;
-  padding:9px 14px;
-  font-size:13px;
-  cursor:pointer;
-}
-.menu3 button:hover{background:#3a3a3a;}
-.menu3 hr{border:none;border-top:1px solid #444;margin:6px 0;}
-.menu3 svg{width:16px;height:16px;stroke:white;fill:none;stroke-width:2;}
-.delete{color:#ff3b3b !important;}
-.delete svg{stroke:#ff3b3b !important;}
-@media(max-width:600px){
-  .topbar{padding:0 10px;}
-  .menu3{width:180px;}
-  .menu3 button{font-size:12px; padding:8px 12px;}
-}
-</style>
+        function toggleHistory() {
+            const h = document.getElementById('history-box');
+            const a = document.getElementById('arrow');
+            h.style.display = h.style.display === 'none' ? 'block' : 'none';
+            a.innerText = h.style.display === 'none' ? '▶' : '▼';
+        }
 
-<script>
-function toggleMenu3(e){
-  e.stopPropagation();
-  document.querySelectorAll(".menu3").forEach(m=>m.style.display="none");
-  let menu = e.target.parentElement.querySelector(".menu3");
-  menu.style.display = menu.style.display === "flex" ? "none" : "flex";
-}
-document.addEventListener("click",()=>document.querySelectorAll(".menu3").forEach(m=>m.style.display="none"));
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            t.innerText = msg;
+            t.style.display = 'block';
+            setTimeout(() => t.style.display = 'none', 2500);
+        }
 
-function toggleTheme(){document.body.classList.toggle("dark");document.body.classList.toggle("light");}
-</script>
-<div class="chat" id="chat"></div>
+        document.addEventListener('click', closeAll);
 
-<div class="inputBar">
-  <div style="
-text-align:center;
-font-size:11px;
-opacity:0.6;
-margin-top:6px;
-">
-StudyGenius AI can make mistakes. Check important info.
-</div>
-  <div class="inputBox">
-
-    <div style="position:relative;">
-      <span class="icon" onclick="toggleMenu(event)">➕</span>
-
-      <div class="menu" id="menu">
-        <button><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14"/><circle cx="9" cy="10" r="2"/><path d="M21 15l-5-5-4 4-2-2-7 7"/></svg>Upload Photo</button>
-        <button><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Upload File</button>
-        <button><svg viewBox="0 0 24 24"><path d="M4 19h16"/><path d="M6 17V5a2 2 0 012-2h8a2 2 0 012 2v12"/><path d="M9 9h6M9 13h4"/></svg>Generate Notes</button>
-        <button><svg viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18"/><path d="M8 7h8M8 11h8M8 15h5"/></svg>Exam Mode</button>
-        <button><svg viewBox="0 0 24 24"><path d="M6 20V10"/><path d="M12 20V6"/><path d="M18 20v-4"/></svg>Practice Paper</button>
-        <button><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16"/><path d="M3 9h18"/></svg>Study Planner</button>
-        <button><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15 15 0 010 20"/></svg>Multi Language</button>
-        <button><svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg>More</button>
-      </div>
-
-    </div>
-
-    <input id="q" placeholder="Ask anything"
-    oninput="toggleButtons()" onkeydown="if(event.key==='Enter') handleAction()">
-
-    <span class="icon">
-      <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24">
-        <path d="M12 14a3 3 0 003-3V5a3 3 0 10-6 0v6a3 3 0 003 3z"/>
-        <path d="M19 11a7 7 0 01-14 0H3a9 9 0 0018 0h-2z"/>
-      </svg>
-    </span>
-
-    <div class="actionBtn" id="actionBtn" onclick="handleAction()">
-      <svg id="icon" width="18" height="18" fill="currentColor" viewBox="0 0 24 24">
-        <path d="M4 10h2v4H4zm4-3h2v10H8zm4-4h2v18h-2zm4 3h2v10h-2zm4 4h2v4h-2z"/>
-      </svg>
-    </div>
-
-  </div>
-</div>
-
-</div>
-</div>
-
-<script>
-window.onload=()=>{setTimeout(()=>{splash.style.display="none";app.style.display="flex";},1200);};
-
-function toggleSidebar(){document.querySelector(".sidebar").classList.toggle("collapsed");}
-
-function toggleMenu(e){e.stopPropagation();menu.style.display=menu.style.display==="flex"?"none":"flex";}
-document.addEventListener("click",()=>menu.style.display="none");
-
-function toggleMenu3(e){
-  e.stopPropagation();
-  document.querySelectorAll(".menu3").forEach(m=>m.style.display="none");
-  let menu = e.target.parentElement.querySelector(".menu3");
-  menu.style.display="flex";
-}
-document.addEventListener("click",()=>document.querySelectorAll(".menu3").forEach(m=>m.style.display="none"));
-
-function toggleButtons(){
-  let val=q.value.trim();
-  let icon=document.getElementById("icon");
-  let btn=document.getElementById("actionBtn");
-  if(val){
-    btn.classList.add("sendActive");
-    icon.innerHTML=`<path d="M12 4l-7 7h4v6h6v-6h4z"/>`;
-  }else{
-    btn.classList.remove("sendActive");
-    icon.innerHTML=`<path d="M4 10h2v4H4zm4-3h2v10H8zm4-4h2v18h-2zm4 3h2v10h-2zm4 4h2v4h-2z"/>`;
-  }
-}
-
-function handleAction(){
-  if(q.value.trim()){
-    let chat=document.getElementById("chat");
-    let user=document.createElement("div");
-    user.className="message user";
-    user.innerText=q.value;
-    chat.appendChild(user);
-
-    let bot=document.createElement("div");
-    bot.className="message bot";
-    bot.innerText="Thinking...";
-    chat.appendChild(bot);
-
-    q.value="";
-    toggleButtons();
-
-    setTimeout(()=>{bot.innerText="Response generated.";},800);
-  }
-}
-
-function toggleTheme(){
-  document.body.classList.toggle("dark");
-  document.body.classList.toggle("light");
-}
-// NEW CHAT HIDE
-function handleAction(){
-if(q.value.trim()){
-
-document.getElementById("newChatScreen").style.display="none";
-
-let chat=document.getElementById("chat");
-
-let user=document.createElement("div");
-user.className="message user";
-user.innerText=q.value;
-chat.appendChild(user);
-
-let bot=document.createElement("div");
-bot.className="message bot";
-
-bot.innerHTML=`
-<div>Response generated.</div>
-
-<div style="display:flex;gap:10px;margin-top:6px;">
-<span>📋</span>
-<span>👍</span>
-<span>👎</span>
-<span>🔄</span>
-<span onclick="toggleMenu3(event)">⋯</span>
-</div>
-`;
-
-chat.appendChild(bot);
-
-q.value="";
-toggleButtons();
-}
-}
-
-// AUTO THEME
-(function(){
-let h=new Date().getHours();
-if(h>=7 && h<=18){
-document.body.classList.add("light");
-}else{
-document.body.classList.add("dark");
-}
-})();
-</script>
-
+        // SAFE MODE
+        window.onerror = function() {
+            showToast("Something went wrong. Please try again.");
+            isProcessing = false;
+            return true;
+        };
+    </script>
 </body>
 </html>
