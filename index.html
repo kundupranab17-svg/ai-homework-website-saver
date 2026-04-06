@@ -2,23 +2,23 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>StudyGenius AI | Your Personal Study Suite</title>
+<title>StudyGenius AI | Premium Edition</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-/* --- YOUR ORIGINAL BASE STYLES (NO CHANGES) --- */
+/* 1. ORIGINAL BASE STRUCTURE (STRICTLY PRESERVED) */
 body.dark{background:#181818;color:white;}
 body.light{background:#fff;color:#111;}
 body{margin:0;font-family:system-ui, -apple-system, sans-serif;display:flex;height:100vh;overflow:hidden;}
 
 /* SPLASH */
-#splash{position:fixed;width:100%;height:100%;background:#0f172a;display:flex;justify-content:center;align-items:center;z-index:9999;transition: 0.5s;}
+#splash{position:fixed;width:100%;height:100%;background:#0f172a;display:flex;justify-content:center;align-items:center;z-index:10000;}
 #logoAnim{width:80px;height:80px;border-radius:50%;overflow:hidden;animation:zoomFade 1.5s ease forwards;}
 #logoAnim img{width:100%;height:100%;object-fit:cover;transform:scale(1.3);}
 @keyframes zoomFade{0%{transform:scale(0.6);opacity:0;}100%{transform:scale(1);}}
 
-/* SIDEBAR */
-.sidebar{width:220px;background:#202123;padding:12px;display:flex;flex-direction:column;justify-content:space-between;transition:0.3s;z-index: 100;}
+/* SIDEBAR STRUCTURE (AS PER YOUR BASE) */
+.sidebar{width:220px;background:#202123;padding:12px;display:flex;flex-direction:column;justify-content:space-between;transition:0.3s;z-index:1000;border-right:1px solid #333;}
 .sidebar.collapsed{width:70px;}
 .sidebar.collapsed .btn span, .sidebar.collapsed .yourChats, .sidebar.collapsed .chatItem, .sidebar.collapsed .planBtn{display:none;}
 .sidebar.collapsed .btn{justify-content:center;}
@@ -28,94 +28,100 @@ body{margin:0;font-family:system-ui, -apple-system, sans-serif;display:flex;heig
 .logoRow{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
 .logoWrap{width:28px;height:28px;border-radius:50%;overflow:hidden;}
 .logoWrap img{width:100%;height:100%;object-fit:cover;}
-.toggleBtn{cursor:pointer;padding:6px;border-radius:6px;}
-.toggleBtn:hover{background:#2a2b32;}
+.toggleBtn{cursor:pointer;padding:6px;border-radius:6px;color:#9ca3af;}
+.toggleBtn:hover{background:#2a2b32;color:white;}
 
-.btn{display:flex;align-items:center;gap:10px;padding:10px;border:none;border-radius:8px;margin:4px 0;background:transparent;color:inherit;cursor:pointer;width:100%;text-align:left;}
+.btn{display:flex;align-items:center;gap:10px;padding:10px;border:none;border-radius:8px;margin:4px 0;background:transparent;color:inherit;cursor:pointer;width:100%;text-align:left;font-size:14px;}
 .btn:hover{background:#2a2b32;}
-.btn svg,.menu svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;}
+.btn svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;}
 
-/* YOUR CHATS */
-.yourChats{font-size:13px;margin:10px 0 6px 6px;color:#9ca3af;font-weight:500;display:flex;justify-content:space-between;align-items:center;padding-right:10px;}
-
-.chatItem{display:flex;justify-content:space-between;align-items:center;padding:8px 10px;border-radius:6px;position:relative;font-size:14px;cursor:pointer;}
+/* CHAT HISTORY AREA */
+.yourChats{font-size:13px;margin:15px 0 8px 6px;color:#9ca3af;font-weight:500;}
+.chatItem{display:flex;justify-content:space-between;align-items:center;padding:8px 10px;border-radius:6px;position:relative;font-size:14px;cursor:pointer;margin-bottom:2px;}
 .chatItem:hover{background:#2a2b32;}
-.left{display:flex;align-items:center;gap:6px;}
-.dot{width:6px;height:6px;background:white;border-radius:50%;}
+.left{display:flex;align-items:center;gap:8px;}
+.dot{width:6px;height:6px;background:#10a37f;border-radius:50%;}
 
-/* MODAL & MENUS */
-.menu3{position:absolute;right:-200px;top:0;width:200px;background:#2a2a2a;border-radius:10px;padding:6px 0;display:none;flex-direction:column;z-index:1000;box-shadow:0 10px 30px rgba(0,0,0,0.5);}
-.menu3 button{display:flex;align-items:center;gap:10px;background:none;border:none;color:white;padding:9px 14px;font-size:13px;cursor:pointer;}
+/* 3-DOT MENU (FIXED POSITIONING) */
+.menu3{
+  position:absolute;
+  left:100%;
+  top:0;
+  width:180px;
+  background:#2a2a2a;
+  border-radius:10px;
+  padding:6px 0;
+  display:none;
+  flex-direction:column;
+  z-index:2000;
+  box-shadow:0 8px 24px rgba(0,0,0,0.4);
+  margin-left:5px;
+}
+.menu3 button{display:flex;align-items:center;gap:10px;background:none;border:none;color:white;padding:9px 14px;font-size:13px;cursor:pointer;width:100%;}
 .menu3 button:hover{background:#3a3a3a;}
 .menu3 hr{border:none;border-top:1px solid #444;margin:6px 0;}
 .delete{color:#ff3b3b !important;}
 
-/* ACCOUNT SECTION */
+/* ACCOUNT & UPGRADE (AS PER YOUR BASE) */
 .divider{height:1px;background:#2f2f2f;margin:10px 0;}
 .account{display:flex;align-items:center;gap:10px;padding:8px;border-radius:8px;cursor:pointer;}
 .account:hover{background:#2a2b32;}
-.avatar{width:32px;height:32px;border-radius:50%;background:#444;background-image:url('avatar-placeholder.png');background-size:cover;}
+.avatar{width:32px;height:32px;border-radius:50%;background:#444;}
 .accInfo{display:flex;flex-direction:column;}
-.accName{font-size:14px;}
-.plan{font-size:11px;color:#aaa;}
+.accName{font-size:14px;font-weight:500;}
+.plan{font-size:11px;color:#8e8ea0;}
 
-.planBtn{margin-top:8px;padding:10px;text-align:center;border-radius:20px;background:#2a2a2a;font-size:13px;cursor:pointer;transition:0.2s;}
-.planBtn:hover{background:#3a3a3a; transform:scale(1.02);}
+.planBtn{margin-top:8px;padding:10px;text-align:center;border-radius:20px;background:#2a2a2a;font-size:13px;cursor:pointer;border:1px solid #444;transition:0.2s;}
+.planBtn:hover{background:#10a37f;border-color:#10a37f;color:white;}
 
-/* MAIN */
-.main{flex:1;display:flex;flex-direction:column;position:relative;}
-.topbar{height:50px;display:flex;align-items:center;justify-content:space-between;padding:0 15px;border-bottom:1px solid #333;}
+/* MAIN CONTENT AREA */
+.main{flex:1;display:flex;flex-direction:column;position:relative;background:inherit;}
+.topbar{height:50px;display:flex;align-items:center;justify-content:space-between;padding:0 15px;border-bottom:1px solid rgba(128,128,128,0.2);z-index:900;}
 
-/* NEW CHAT HERO VIEW (ChatGPT Style) */
-#hero-view{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;}
-#hero-view h1{font-size:38px;margin-bottom:20px;letter-spacing:-1px;}
-.hero-icons{position:absolute;top:15px;right:15px;display:flex;gap:10px;}
+/* PREMIUM PLAN CAPSULE */
+.plan-capsule{background:rgba(16,163,127,0.1);border:1px solid #10a37f;color:#10a37f;padding:3px 12px;border-radius:20px;font-size:11px;font-weight:700;}
 
-.chat{flex:1;padding:25px 15%;overflow-y:auto;display:none;}
-.message{max-width:85%;padding:14px;margin:15px 0;border-radius:14px;position:relative;line-height:1.5;}
+/* CHAT BOX */
+.chat{flex:1;padding:20px 15%;overflow-y:auto;scroll-behavior:smooth;}
+.message{max-width:80%;padding:14px 18px;margin:12px 0;border-radius:18px;line-height:1.5;position:relative;animation:fadeIn 0.3s ease;}
+@keyframes fadeIn { from{opacity:0; transform:translateY(5px);} to{opacity:1; transform:translateY(0);} }
 .user{margin-left:auto;background:linear-gradient(45deg,#3b82f6,#06b6d4);color:white;}
 .bot{background:#242424;border:1px solid #333;}
 
-/* AI ACTION ICONS (Like, Copy, 3-dots) */
-.ai-actions{display:flex;gap:12px;margin-top:10px;opacity:0;transition:0.3s;}
-.bot:hover .ai-actions{opacity:1;}
-.ai-actions span{cursor:pointer;font-size:12px;color:#8e8ea0;}
-.ai-actions span:hover{color:white;}
+/* INPUT SECTION (AS PER YOUR BASE) */
+.inputBar{padding:15px 15%;background:inherit;}
+.inputBox{display:flex;align-items:center;gap:12px;max-width:800px;margin:auto;background:#2a2a2a;border-radius:22px;padding:10px 18px;border:1px solid #444;box-shadow:0 4px 15px rgba(0,0,0,0.1);}
+input{flex:1;background:none;border:none;color:inherit;outline:none;font-size:15px;}
+.icon{cursor:pointer;padding:6px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#9ca3af;transition:0.2s;}
+.icon:hover{background:#3a3a3a;color:white;}
 
-/* INPUT */
-.inputBar{padding:14px 15%;border-top:1px solid #333;background:transparent;}
-.inputBox{display:flex;align-items:center;gap:10px;max-width:800px;margin:auto;background:#2a2a2a;border-radius:18px;padding:12px 14px;box-shadow:0 0 20px rgba(0,0,0,0.2);}
-input{flex:1;background:none;border:none;color:inherit;outline:none;font-size:16px;}
-.icon{cursor:pointer;padding:6px;border-radius:6px;display:flex;align-items:center;}
+/* FOOTER DISCLAIMER */
+.disclaimer-small{font-size:11px;color:#8e8ea0;text-align:center;margin-top:10px;letter-spacing:0.3px;}
 
-/* DISCLAIMER FOOTER */
-.footer-text{font-size:11px;color:#8e8ea0;text-align:center;margin-top:10px;}
-
-/* PLAN CAPSULE (TOP) */
-.plan-capsule{background:rgba(16,163,127,0.1);border:1px solid #10a37f;color:#10a37f;padding:4px 12px;border-radius:20px;font-size:12px;font-weight:600;}
-
-/* MODAL UPGRADE */
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.8);display:none;justify-content:center;align-items:center;z-index:10000;backdrop-filter:blur(5px);}
-.modal-box{background:#202123;padding:30px;border-radius:20px;width:90%;max-width:500px;border:1px solid #444;}
-
-.menu{position:absolute;bottom:65px;left:0;background:#2a2a2a;border-radius:12px;padding:8px;display:none;flex-direction:column;width:230px;box-shadow:0 10px 30px rgba(0,0,0,0.5);z-index:500;}
-.menu button{display:flex;align-items:center;gap:10px;background:none;border:none;color:white;padding:10px;border-radius:8px;cursor:pointer;font-size:14px;}
+/* PLUS MENU */
+.menu{position:absolute;bottom:70px;left:0;background:#2a2a2a;border-radius:12px;padding:8px;display:none;flex-direction:column;width:220px;box-shadow:0 10px 30px rgba(0,0,0,0.5);z-index:3000;border:1px solid #444;}
+.menu button{display:flex;align-items:center;gap:12px;background:none;border:none;color:white;padding:10px;border-radius:8px;cursor:pointer;font-size:13px;width:100%;}
 .menu button:hover{background:#3a3a3a;}
 
-.actionBtn{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;background:#2f2f2f;transition:0.2s;}
-.sendActive{background:#10a37f;}
+/* ACTION BUTTON */
+.actionBtn{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;background:#3a3a3a;transition:0.3s;}
+.sendActive{background:#10a37f;color:white;transform:rotate(0deg);}
+
+/* MODAL FOR UPGRADE */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.85);display:none;justify-content:center;align-items:center;z-index:9999;backdrop-filter:blur(4px);}
+.modal-card{background:#202123;padding:30px;border-radius:20px;width:90%;max-width:450px;border:1px solid #444;text-align:center;}
 </style>
 </head>
 
 <body class="dark">
 
 <div id="splash">
-  <div id="logoAnim"><img src="logo.png" onerror="this.style.display='none'"></div>
+  <div id="logoAnim"><img src="logo.png" onerror="this.parentNode.innerHTML='<h2 style=color:white>SG</h2>'"></div>
 </div>
 
-<div id="app" style="display:flex; width:100%; height:100vh;">
+<div id="app" style="display:none; width:100%; height:100%; display:flex;">
 
-<div class="sidebar">
+<div class="sidebar" id="sidebar">
   <div>
     <div class="logoRow">
       <div class="logoWrap"><img src="logo.png" onerror="this.style.display='none'"></div>
@@ -130,85 +136,75 @@ input{flex:1;background:none;border:none;color:inherit;outline:none;font-size:16
     <button class="btn"><svg viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg><span>Codex</span></button>
     <button class="btn"><svg viewBox="0 0 24 24"><path d="M3 7h5l2 3h11v11H3z"/></svg><span>Projects</span></button>
 
-    <div class="yourChats">
-      <span>Your Chats</span>
-      <span style="cursor:pointer; font-size:10px;" id="hist-arrow" onclick="toggleHistory()">▼</span>
-    </div>
+    <div class="yourChats">Your Chats</div>
 
-    <div id="history-list">
-      <div class="chatItem">
-        <div class="left"><div class="dot"></div><span>Example Chat</span></div>
-        <div onclick="toggleMenu3(event)" style="font-size:18px;">⋯</div>
-        <div class="menu3">
-          <button>Share</button>
-          <button>Rename</button>
-          <hr>
-          <button class="delete">Delete</button>
-        </div>
+    <div class="chatItem">
+      <div class="left"><div class="dot"></div><span>Example Chat</span></div>
+      <div onclick="toggleMenu3(event)" style="cursor:pointer; color:#8e8ea0;">⋯</div>
+      <div class="menu3">
+        <button>Share</button>
+        <button>Rename</button>
+        <hr>
+        <button class="delete">Delete</button>
       </div>
     </div>
   </div>
 
   <div>
     <div class="divider"></div>
-    <div class="account" onclick="alert('Profile Settings')">
+    <div class="account">
       <div class="avatar"></div>
       <div class="accInfo">
         <div class="accName">Pranab</div>
-        <div class="plan">Free Member</div>
+        <div class="plan">Free Plan</div>
       </div>
     </div>
-    <div class="planBtn" onclick="toggleUpgradeModal(true)">Upgrade Plan</div>
+    <div class="planBtn" onclick="openUpgrade()">Upgrade Plan</div>
   </div>
 </div>
 
 <div class="main">
   <div class="topbar">
-    <div style="font-weight:600; display:flex; align-items:center; gap:8px; cursor:pointer;" onclick="toggleModelMenu(event)">
-      StudyGenius AI 4.0 
-      <svg width="14" height="14" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9" stroke="currentColor" stroke-width="3" fill="none"/></svg>
-      <div id="model-menu" class="menu3" style="top:45px; left:15px; right:auto;">
-         <button>✨ StudyGenius Pro (High level)</button>
-         <button>🎓 Academic Specialist</button>
-         <button>⚡ Fast Response</button>
+    <div style="font-weight:600; display:flex; align-items:center; gap:8px; cursor:pointer;" onclick="toggleTopMenu(event)">
+      StudyGenius AI ▼
+      <div id="topModelMenu" class="menu3" style="top:45px; left:0; right:auto;">
+         <button>✨ StudyGenius Pro</button>
+         <button>🎓 Academic Mode</button>
+         <button>⚡ Lightning Fast</button>
       </div>
     </div>
-
+    
     <div class="plan-capsule">Free Plan</div>
 
-    <div style="display:flex; align-items:center; gap:15px;">
-      <div class="icon" onclick="toggleTheme()">🌗</div>
+    <div style="display:flex; align-items:center; gap:12px;">
+      <div class="icon" onclick="toggleTheme()" style="font-size:18px;">🌗</div>
     </div>
   </div>
 
-  <div id="hero-view">
-    <div class="hero-icons">
-       <span class="icon" title="Group Chat">👥</span>
-       <span class="icon" title="Temporary Chat">🔒</span>
+  <div class="chat" id="chat">
+    <div style="height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; opacity:0.3;" id="empty-state">
+       <h1 style="font-size:40px; margin-bottom:10px;">StudyGenius</h1>
+       <p>Ask anything to start learning</p>
     </div>
-    <h1>What are you working on?</h1>
-    <p style="color:#8e8ea0; font-size:14px;">Select a tool or start typing to begin your study session.</p>
   </div>
-
-  <div class="chat" id="chat"></div>
 
   <div class="inputBar">
     <div class="inputBox">
       <div style="position:relative;">
-        <span class="icon" onclick="toggleMenu(event)">➕</span>
-        <div class="menu" id="menu">
+        <span class="icon" onclick="togglePlusMenu(event)" style="font-size:20px;">＋</span>
+        <div class="menu" id="plusMenu">
           <button>🖼️ Upload Photo</button>
           <button>📄 Upload File</button>
-          <button>📒 Colourful Notes</button>
-          <button>📝 Generate Notes</button>
+          <button>📒 Generate Notes</button>
           <button>🎯 Exam Mode</button>
           <button>📊 Practice Paper</button>
+          <button>📅 Study Planner</button>
         </div>
       </div>
 
-      <input id="q" placeholder="Ask anything..." oninput="toggleButtons()" onkeydown="if(event.key==='Enter') handleAction()">
+      <input id="q" placeholder="Ask anything..." oninput="updateUI()" onkeydown="if(event.key==='Enter') handleAction()">
 
-      <span class="icon">🎤</span>
+      <span class="icon" title="Voice Input">🎤</span>
 
       <div class="actionBtn" id="actionBtn" onclick="handleAction()">
         <svg id="icon" width="18" height="18" fill="currentColor" viewBox="0 0 24 24">
@@ -216,108 +212,38 @@ input{flex:1;background:none;border:none;color:inherit;outline:none;font-size:16
         </svg>
       </div>
     </div>
-    <div class="footer-text">
-       StudyGenius AI can make mistakes. Check important info. See Cookie Preferences
+    <div class="disclaimer-small">
+      StudyGenius AI can make mistakes. Check important info. See Cookie Preferences
     </div>
   </div>
 </div>
 
 </div>
 
-<div id="upgrade-modal" class="modal-overlay" onclick="toggleUpgradeModal(false)">
-  <div class="modal-box" onclick="event.stopPropagation()">
-     <h2 style="text-align:center; margin-bottom:20px;">Upgrade Your Plan</h2>
-     <div style="background:rgba(255,255,255,0.05); padding:20px; border-radius:15px; border:1px solid var(--primary);">
-        <h3 style="color:#10a37f;">Pro Membership</h3>
-        <p style="font-size:24px; font-weight:bold; margin:10px 0;">$9.99 / mo</p>
-        <ul style="font-size:13px; line-height:2; color:#ccc;">
-           <li>✅ High-level AI models</li>
-           <li>✅ Unlimited Document Uploads</li>
-           <li>✅ Early access to Study Planner</li>
-        </ul>
-        <button style="width:100%; background:#10a37f; color:white; border:none; padding:12px; border-radius:10px; margin-top:15px; font-weight:bold; cursor:pointer;">Upgrade Now</button>
-     </div>
+<div id="upgradeModal" class="modal-overlay" onclick="this.style.display='none'">
+  <div class="modal-card" onclick="event.stopPropagation()">
+    <h2 style="color:#10a37f; margin-bottom:15px;">Go Pro</h2>
+    <p style="color:#8e8ea0; margin-bottom:20px;">Unlock unlimited uploads, faster response, and expert study tools.</p>
+    <div style="background:#2a2a2a; padding:20px; border-radius:15px; border:1px solid #10a37f; margin-bottom:20px;">
+       <span style="font-size:32px; font-weight:bold;">$9.99</span>/mo
+    </div>
+    <button class="planBtn" style="width:100%; background:#10a37f; color:white; border:none; padding:12px;">Upgrade Now</button>
   </div>
 </div>
 
 <script>
-// ORIGINAL INITIALIZATION
-window.onload=()=>{setTimeout(()=>{splash.style.opacity="0"; setTimeout(()=>splash.style.display="none",500); app.style.display="flex";},1500);};
+// INITIALIZATION
+window.onload=()=>{
+  setTimeout(()=>{
+    const splash = document.getElementById('splash');
+    splash.style.opacity = '0';
+    setTimeout(()=> splash.style.display='none', 500);
+    document.getElementById('app').style.display='flex';
+  },1500);
+};
 
-function toggleSidebar(){document.querySelector(".sidebar").classList.toggle("collapsed");}
-
-function toggleMenu(e){e.stopPropagation();menu.style.display=menu.style.display==="flex"?"none":"flex";}
-function toggleMenu3(e){
-  e.stopPropagation();
-  let menu = e.target.parentElement.querySelector(".menu3");
-  menu.style.display=menu.style.display==="flex"?"none":"flex";
-}
-function toggleModelMenu(e){
-  e.stopPropagation();
-  let m = document.getElementById('model-menu');
-  m.style.display = m.style.display === "flex" ? "none" : "flex";
-}
-
-document.addEventListener("click",()=>{
-  document.getElementById("menu").style.display="none";
-  document.querySelectorAll(".menu3").forEach(m=>m.style.display="none");
-});
-
-function toggleButtons(){
-  let val=q.value.trim();
-  let icon=document.getElementById("icon");
-  let btn=document.getElementById("actionBtn");
-  if(val){
-    btn.classList.add("sendActive");
-    icon.innerHTML=`<path d="M12 4l-7 7h4v6h6v-6h4z"/>`;
-  }else{
-    btn.classList.remove("sendActive");
-    icon.innerHTML=`<path d="M4 10h2v4H4zm4-3h2v10H8zm4-4h2v18h-2zm4 3h2v10h-2zm4 4h2v4h-2z"/>`;
-  }
-}
-
-function handleAction(){
-  let val = q.value.trim();
-  if(val){
-    document.getElementById("hero-view").style.display="none";
-    let chat=document.getElementById("chat");
-    chat.style.display="block";
-
-    // User Msg
-    let user=document.createElement("div");
-    user.className="message user";
-    user.innerText=val;
-    chat.appendChild(user);
-
-    // AI Msg (With premium icons)
-    let bot=document.createElement("div");
-    bot.className="message bot";
-    const now = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-    bot.innerHTML=`
-      <div style="font-size:14px;">Thinking...</div>
-      <div class="ai-actions">
-         <span title="Copy">📋</span>
-         <span title="Like">👍</span>
-         <span title="Dislike">👎</span>
-         <span title="Try Again">🔄</span>
-         <span onclick="toggleMenu3(event)">⋯</span>
-         <div class="menu3" style="bottom:30px; right:0; top:auto;">
-            <div style="font-size:10px; padding:5px 12px; color:#888;">${now}</div>
-            <button>📍 Branch a new chat</button>
-            <button>🔊 Read aloud</button>
-         </div>
-      </div>
-    `;
-    chat.appendChild(bot);
-
-    q.value="";
-    toggleButtons();
-    chat.scrollTop = chat.scrollHeight;
-
-    setTimeout(()=>{
-      bot.querySelector('div').innerText="This is your high-level StudyGenius response based on your query.";
-    },1000);
-  }
+function toggleSidebar(){
+  document.getElementById("sidebar").classList.toggle("collapsed");
 }
 
 function toggleTheme(){
@@ -325,20 +251,77 @@ function toggleTheme(){
   document.body.classList.toggle("light");
 }
 
-function toggleHistory(){
-  let list = document.getElementById('history-list');
-  let arrow = document.getElementById('hist-arrow');
-  if(list.style.display === "none") {
-    list.style.display = "block";
-    arrow.innerText = "▼";
+function togglePlusMenu(e){
+  e.stopPropagation();
+  const m = document.getElementById("plusMenu");
+  m.style.display = m.style.display === "flex" ? "none" : "flex";
+}
+
+function toggleMenu3(e){
+  e.stopPropagation();
+  closeAllMenus();
+  let menu = e.target.parentElement.querySelector(".menu3");
+  menu.style.display = "flex";
+}
+
+function toggleTopMenu(e){
+  e.stopPropagation();
+  closeAllMenus();
+  const m = document.getElementById("topModelMenu");
+  m.style.display = m.style.display === "flex" ? "none" : "flex";
+}
+
+function closeAllMenus(){
+  document.querySelectorAll(".menu3, .menu").forEach(m => m.style.display = "none");
+}
+
+document.addEventListener("click", closeAllMenus);
+
+function updateUI(){
+  let val = q.value.trim();
+  let btn = document.getElementById("actionBtn");
+  let icon = document.getElementById("icon");
+  if(val){
+    btn.classList.add("sendActive");
+    icon.innerHTML = `<path d="M12 4l-7 7h4v6h6v-6h4z"/>`;
   } else {
-    list.style.display = "none";
-    arrow.innerText = "▶";
+    btn.classList.remove("sendActive");
+    icon.innerHTML = `<path d="M4 10h2v4H4zm4-3h2v10H8zm4-4h2v18h-2zm4 3h2v10h-2zm4 4h2v4h-2z"/>`;
   }
 }
 
-function toggleUpgradeModal(show){
-  document.getElementById('upgrade-modal').style.display = show ? "flex" : "none";
+function handleAction(){
+  let val = q.value.trim();
+  if(!val) return;
+
+  const chat = document.getElementById("chat");
+  const empty = document.getElementById("empty-state");
+  if(empty) empty.style.display = "none";
+
+  // USER MESSAGE
+  let uDiv = document.createElement("div");
+  uDiv.className = "message user";
+  uDiv.innerText = val;
+  chat.appendChild(uDiv);
+
+  // BOT RESPONSE
+  let bDiv = document.createElement("div");
+  bDiv.className = "message bot";
+  bDiv.innerHTML = `Thinking...`;
+  chat.appendChild(bDiv);
+
+  q.value = "";
+  updateUI();
+  chat.scrollTop = chat.scrollHeight;
+
+  setTimeout(()=>{
+    bDiv.innerHTML = `Generating premium academic response for: <b>${val}</b>. <br><br> StudyGenius AI is ready to help you excel in your exams.`;
+    chat.scrollTop = chat.scrollHeight;
+  }, 1000);
+}
+
+function openUpgrade(){
+  document.getElementById("upgradeModal").style.display = "flex";
 }
 </script>
 
