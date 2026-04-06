@@ -2,153 +2,287 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>StudyGenius AI</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-/* PREMIUM FINAL POLISH */
-body{margin:0;font-family:system-ui;background:#181818;color:#fff;display:flex;height:100vh;transition:.3s}
-body.light{background:#f9fafb;color:#111}
+/* ===== THEME ===== */
+body.dark{background:#181818;color:white;}
+body.light{background:#ffffff;color:#111;}
+body{margin:0;font-family:system-ui;display:flex;height:100vh;transition:0.3s;}
 
-.sidebar{width:220px;background:#202123;padding:12px;display:flex;flex-direction:column;justify-content:space-between;transition:.3s}
-.sidebar.collapsed{width:70px}
+/* ===== SPLASH ===== */
+#splash{
+position:fixed;width:100%;height:100%;
+background:#0f172a;display:flex;justify-content:center;align-items:center;
+z-index:9999;
+}
+#logoAnim{
+width:80px;height:80px;border-radius:50%;
+overflow:hidden;
+animation:zoomFade 1.2s ease forwards;
+}
+#logoAnim img{width:100%;height:100%;object-fit:cover;}
+@keyframes zoomFade{
+0%{transform:scale(0.5);opacity:0;}
+100%{transform:scale(1);}
+}
 
-.btn{display:flex;align-items:center;gap:10px;padding:10px;border-radius:8px;background:none;border:none;color:inherit;cursor:pointer;transition:.2s}
-.btn:hover{background:#2a2b32;transform:scale(1.02)}
+/* ===== SIDEBAR ===== */
+.sidebar{width:230px;background:#202123;padding:12px;display:flex;flex-direction:column;justify-content:space-between;}
+.btn{display:flex;align-items:center;gap:10px;padding:10px;border-radius:8px;cursor:pointer;}
+.btn:hover{background:#2a2b32;}
 
-.yourChats{display:flex;justify-content:space-between;align-items:center;font-size:13px;margin:10px 0;color:#aaa;cursor:pointer}
+.yourChats{
+display:flex;justify-content:space-between;
+cursor:pointer;color:#9ca3af;font-size:13px;margin-top:10px;
+}
 
-.chatItem{display:flex;justify-content:space-between;align-items:center;padding:8px;border-radius:6px;font-size:14px}
-.chatItem:hover{background:#2a2b32}
+/* CHAT LIST */
+#chatList{transition:0.3s;}
+.chatItem{
+display:flex;justify-content:space-between;
+padding:8px;border-radius:6px;
+}
+.chatItem:hover{background:#2a2b32;}
 
-.main{flex:1;display:flex;flex-direction:column}
+.left{display:flex;gap:6px;}
+.dot{width:6px;height:6px;background:white;border-radius:50%;}
 
-.topbar{height:50px;display:flex;align-items:center;justify-content:space-between;padding:0 15px;border-bottom:1px solid #333;position:relative;background:rgba(0,0,0,0.3);backdrop-filter:blur(6px)}
+/* ===== MAIN ===== */
+.main{flex:1;display:flex;flex-direction:column;}
 
-.planCapsule{position:absolute;left:50%;transform:translateX(-50%);background:#2a2a2a;padding:5px 16px;border-radius:20px;font-size:12px;border:1px solid #444}
+.topbar{
+height:50px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:0 15px;
+border-bottom:1px solid #444;
+}
 
-.chat{flex:1;overflow:auto;padding:20px}
-.message{max-width:70%;padding:12px;margin:10px 0;border-radius:14px;animation:fadeIn .3s}
-.user{margin-left:auto;background:linear-gradient(45deg,#3b82f6,#06b6d4)}
-.bot{background:#242424}
+/* CAPSULE */
+.planCapsule{
+padding:4px 12px;
+border-radius:20px;
+background:#2a2a2a;
+font-size:12px;
+}
 
-@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+/* CHAT */
+.chat{flex:1;padding:20px;overflow-y:auto;}
 
-.inputBar{padding:10px;border-top:1px solid #333}
-.inputBox{display:flex;gap:10px;background:#2a2a2a;padding:12px;border-radius:16px;transition:.2s}
-.inputBox:focus-within{box-shadow:0 0 0 1px #10a37f}
+.message{
+padding:14px;border-radius:14px;margin:10px 0;max-width:70%;
+}
+.user{margin-left:auto;background:#3b82f6;}
+.bot{background:#242424;}
 
-input{flex:1;background:none;border:none;color:inherit;outline:none}
+/* ACTION ICONS */
+.actions{
+display:flex;gap:10px;margin-top:6px;font-size:12px;opacity:0.7;
+}
+.actions span{cursor:pointer;}
+.actions span:hover{opacity:1;}
 
-.actionBtn{cursor:pointer;padding:6px;border-radius:8px;transition:.2s}
-.actionBtn:hover{background:#333;transform:scale(1.1)}
+/* INPUT */
+.inputBar{padding:12px;border-top:1px solid #333;}
+.inputBox{
+display:flex;align-items:center;
+gap:10px;background:#2a2a2a;
+padding:10px;border-radius:20px;
+}
+input{flex:1;background:none;border:none;color:inherit;outline:none;}
 
-.footerNote{font-size:10px;text-align:center;opacity:.6;margin-top:6px}
+/* NEW CHAT SCREEN */
+#newChat{
+position:absolute;
+top:50%;left:50%;
+transform:translate(-50%,-50%);
+text-align:center;
+}
+#newChat h1{font-size:28px;margin-bottom:20px;}
 
-.homeScreen{flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center}
-.homeTitle{font-size:30px;margin-bottom:20px;font-weight:600}
+/* DISCLAIMER */
+.footer{
+text-align:center;
+font-size:11px;
+opacity:0.6;
+margin-top:6px;
+}
 
+/* UPGRADE POPUP */
+#upgrade{
+position:fixed;
+top:0;left:0;
+width:100%;height:100%;
+background:rgba(0,0,0,0.6);
+display:none;
+justify-content:center;
+align-items:center;
+}
+.popup{
+background:#1f1f1f;
+padding:20px;
+border-radius:12px;
+width:300px;
+}
+.popup button{
+width:100%;padding:10px;margin-top:10px;
+border:none;border-radius:8px;
+cursor:pointer;
+}
 </style>
 </head>
 
-<body>
+<body class="dark">
 
-<div class="sidebar">
-  <div>
-    <button class="btn" onclick="newChat()">New Chat</button>
-    <button class="btn">Search Chats</button>
-    <button class="btn">Images</button>
-    <button class="btn">Apps</button>
-
-    <div class="yourChats" onclick="toggleChats()">
-      <span>Your Chats</span>
-      <span id="arrow">▼</span>
-    </div>
-
-    <div id="chatList">
-      <div class="chatItem">
-        <span>Example Chat</span>
-        <span>⋯</span>
-      </div>
-    </div>
-  </div>
-
-  <div>
-    <div>Pranab</div>
-    <div style="font-size:12px;opacity:.7">Free</div>
-    <button class="btn">Upgrade Plan</button>
-  </div>
+<!-- SPLASH -->
+<div id="splash">
+<div id="logoAnim"><img src="logo.png"></div>
 </div>
 
+<div id="app" style="display:none; width:100%; display:flex;">
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+<div>
+
+<div class="btn" onclick="showNewChat()">➕ New Chat</div>
+
+<div class="yourChats" onclick="toggleChats()">
+<span>Your Chats</span>
+<span id="arrow">▼</span>
+</div>
+
+<div id="chatList">
+<div class="chatItem">
+<div class="left">
+<div class="dot"></div>
+<span>Example Chat</span>
+</div>
+<div>⋯</div>
+</div>
+</div>
+
+</div>
+
+<div>
+<div onclick="openUpgrade()" class="btn">Upgrade Plan</div>
+</div>
+
+</div>
+
+<!-- MAIN -->
 <div class="main">
 
 <div class="topbar">
-  <div>StudyGenius AI</div>
-  <div class="planCapsule">Free</div>
-  <div onclick="toggleTheme()" style="cursor:pointer">🌗</div>
+<div>StudyGenius AI</div>
+<div class="planCapsule">Free</div>
 </div>
 
-<div id="home" class="homeScreen">
-  <div class="homeTitle">What are you working on?</div>
+<!-- NEW CHAT SCREEN -->
+<div id="newChat">
+<h1>What are you working on?</h1>
 </div>
 
-<div id="chat" class="chat" style="display:none"></div>
+<div class="chat" id="chat"></div>
 
 <div class="inputBar">
-  <div class="inputBox">
-    <input id="q" placeholder="Ask anything" onkeydown="if(event.key==='Enter')send()">
-    <div class="actionBtn" onclick="send()">➤</div>
-  </div>
-  <div class="footerNote">StudyGenius AI can make mistakes. Check important info. See cookie preferences.</div>
+<div class="inputBox">
+<input id="q" placeholder="Ask anything"
+onkeydown="if(event.key==='Enter') sendMsg()">
+<button onclick="sendMsg()">➤</button>
+</div>
+<div class="footer">
+StudyGenius AI can make mistakes. Check important info.
+</div>
 </div>
 
+</div>
+</div>
+
+<!-- UPGRADE -->
+<div id="upgrade">
+<div class="popup">
+<h3>Upgrade Plan</h3>
+<button>Free</button>
+<button>Pro</button>
+<button onclick="closeUpgrade()">Close</button>
+</div>
 </div>
 
 <script>
+/* SPLASH */
+window.onload=()=>{
+setTimeout(()=>{
+splash.style.display="none";
+app.style.display="flex";
+},1200);
+
+/* AUTO THEME */
+let h=new Date().getHours();
+if(h>=6 && h<18){
+document.body.classList.remove("dark");
+document.body.classList.add("light");
+}
+};
+
+/* CHAT TOGGLE */
 function toggleChats(){
-  let list=document.getElementById('chatList');
-  let arrow=document.getElementById('arrow');
-  if(list.style.display==='none'){
-    list.style.display='block';
-    arrow.innerText='▼';
-  }else{
-    list.style.display='none';
-    arrow.innerText='▶';
-  }
+let list=document.getElementById("chatList");
+let arrow=document.getElementById("arrow");
+
+if(list.style.display==="none"){
+list.style.display="block";
+arrow.innerText="▼";
+}else{
+list.style.display="none";
+arrow.innerText="▶";
+}
 }
 
-function newChat(){
-  document.getElementById('home').style.display='flex';
-  document.getElementById('chat').style.display='none';
+/* NEW CHAT */
+function showNewChat(){
+document.getElementById("chat").innerHTML="";
+document.getElementById("newChat").style.display="block";
 }
 
-function send(){
-  let q=document.getElementById('q');
-  if(!q.value.trim())return;
+/* SEND MSG */
+function sendMsg(){
+let q=document.getElementById("q");
+if(!q.value) return;
 
-  document.getElementById('home').style.display='none';
-  let chat=document.getElementById('chat');
-  chat.style.display='block';
+let chat=document.getElementById("chat");
+document.getElementById("newChat").style.display="none";
 
-  let user=document.createElement('div');
-  user.className='message user';
-  user.innerText=q.value;
-  chat.appendChild(user);
+/* USER */
+let u=document.createElement("div");
+u.className="message user";
+u.innerText=q.value;
+chat.appendChild(u);
 
-  let bot=document.createElement('div');
-  bot.className='message bot';
-  bot.innerText='Thinking...';
-  chat.appendChild(bot);
+/* BOT */
+let b=document.createElement("div");
+b.className="message bot";
+b.innerHTML="Thinking...<div class='actions'>\
+<span>📋</span><span>👍</span><span>👎</span><span>🔄</span><span>⋯</span>\
+</div>";
+chat.appendChild(b);
 
-  q.value='';
+q.value="";
 
-  setTimeout(()=>{
-    bot.innerText='Response generated.';
-  },800);
+setTimeout(()=>{
+b.childNodes[0].textContent="Response generated.";
+},800);
 }
 
-function toggleTheme(){
-  document.body.classList.toggle('light');
+/* UPGRADE */
+function openUpgrade(){
+document.getElementById("upgrade").style.display="flex";
+}
+function closeUpgrade(){
+document.getElementById("upgrade").style.display="none";
 }
 </script>
 
