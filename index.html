@@ -2,136 +2,182 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>StudyGenius AI | Premium Mega Suite</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StudyGenius AI | Premium Academic Suite</title>
 
 <style>
-/* --- 1. CORE BASE (PRESERVED & STABILIZED) --- */
+/* --- 1. GLOBAL & THEME VARIABLES --- */
 :root {
     --primary: #10a37f;
-    --sidebar-dark: #202123;
-    --main-dark: #181818;
-    --glass: rgba(255, 255, 255, 0.05);
+    --primary-hover: #1a7f64;
+    --sidebar-bg: #202123;
+    --main-bg: #181818;
+    --card-bg: #2a2a2a;
+    --border: rgba(255, 255, 255, 0.1);
+    --text-main: #ececf1;
+    --text-muted: #9ca3af;
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-body.dark { background: var(--main-dark); color: white; }
-body.light { background: #ffffff; color: #111; }
-body { margin: 0; font-family: 'Inter', system-ui, -apple-system, sans-serif; display: flex; height: 100vh; overflow: hidden; }
-
-/* --- 2. SPLASH SCREEN --- */
-#splash { position: fixed; inset: 0; background: #0f172a; display: flex; justify-content: center; align-items: center; z-index: 10000; transition: 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
-#logoAnim { width: 100px; height: 100px; border-radius: 50%; overflow: hidden; animation: pulse 2s infinite; border: 2px solid var(--primary); }
-@keyframes pulse { 0% { transform: scale(0.9); opacity: 0.7; } 50% { transform: scale(1); opacity: 1; } 100% { transform: scale(0.9); opacity: 0.7; } }
-
-/* --- 3. SIDEBAR (STABLE STRUCTURE) --- */
-.sidebar { width: 260px; background: var(--sidebar-dark); padding: 12px; display: flex; flex-direction: column; justify-content: space-between; transition: 0.3s ease; z-index: 1000; position: relative; border-right: 1px solid rgba(255,255,255,0.05); }
-.sidebar.collapsed { width: 75px; }
-.sidebar.collapsed .btn span, .sidebar.collapsed .yourChats, .sidebar.collapsed .chatItem span, .sidebar.collapsed .planBtn, .sidebar.collapsed .accInfo { display: none; }
-.sidebar.collapsed .btn { justify-content: center; padding: 12px 0; }
-
-.logoRow { display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px; padding: 0 5px; }
-.logoWrap { width: 32px; height: 32px; border-radius: 8px; background: var(--primary); display: flex; align-items: center; justify-content: center; font-weight: bold; color: white; overflow: hidden; }
-.toggleBtn { cursor: pointer; padding: 8px; border-radius: 8px; color: #8e8ea0; transition: 0.2s; }
-.toggleBtn:hover { background: #2a2b32; color: white; }
-
-.btn { display: flex; align-items: center; gap: 12px; padding: 12px; border: none; border-radius: 10px; margin: 4px 0; background: transparent; color: #ececf1; cursor: pointer; width: 100%; transition: 0.2s; font-size: 14px; font-weight: 500; }
-.btn:hover { background: #2a2b32; }
-.btn svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 2; }
-
-/* --- 4. CHAT HISTORY --- */
-.yourChats { font-size: 12px; margin: 20px 0 10px 10px; color: #8e8ea0; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; }
-.chatItem { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-radius: 8px; font-size: 14px; cursor: pointer; margin-bottom: 4px; color: #ececf1; transition: 0.2s; position: relative; }
-.chatItem:hover { background: #2a2b32; }
-.dot { width: 8px; height: 8px; background: var(--primary); border-radius: 50%; box-shadow: 0 0 10px var(--primary); }
-
-/* --- 5. SMART MENUS (Z-INDEX FIXED) --- */
-.menu3 { position: absolute; left: 240px; top: 0; width: 200px; background: #252525; border-radius: 12px; padding: 8px 0; display: none; flex-direction: column; z-index: 5000; box-shadow: 0 15px 35px rgba(0,0,0,0.5); border: 1px solid #333; }
-.menu3 button { display: flex; align-items: center; gap: 12px; background: none; border: none; color: #efeff1; padding: 10px 15px; font-size: 13px; cursor: pointer; width: 100%; transition: 0.2s; }
-.menu3 button:hover { background: #353535; }
-.delete { color: #ff4d4d !important; }
-
-/* --- 6. MAIN CONTENT --- */
-.main { flex: 1; display: flex; flex-direction: column; position: relative; overflow: hidden; background: inherit; }
-.topbar { height: 60px; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; border-bottom: 1px solid rgba(128,128,128,0.1); background: transparent; backdrop-filter: blur(10px); z-index: 900; }
-
-.plan-capsule { background: rgba(16, 163, 127, 0.1); border: 1px solid var(--primary); color: var(--primary); padding: 5px 15px; border-radius: 20px; font-size: 12px; font-weight: 700; cursor: pointer; transition: 0.3s; }
-.plan-capsule:hover { background: var(--primary); color: white; }
-
-/* --- 7. CHAT AREA --- */
-.chat { flex: 1; padding: 20px 15%; overflow-y: auto; display: flex; flex-direction: column; gap: 25px; scrollbar-width: thin; scrollbar-color: #444 transparent; }
-.chat::-webkit-scrollbar { width: 6px; }
-.chat::-webkit-scrollbar-thumb { background: #444; border-radius: 10px; }
-
-/* HERO SECTION (BLANK STATE) */
-#hero { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; animation: fadeIn 0.8s ease; }
-#hero h1 { font-size: 42px; font-weight: 800; margin-bottom: 15px; background: linear-gradient(to right, #fff, #888); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-
-/* MESSAGES */
-.message { max-width: 85%; padding: 18px 22px; border-radius: 20px; line-height: 1.6; font-size: 15px; position: relative; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
-.user { margin-left: auto; background: #2a2b32; border: 1px solid rgba(255,255,255,0.1); color: white; border-bottom-right-radius: 4px; }
-.bot { background: transparent; border: none; padding-left: 0; border-bottom-left-radius: 4px; width: 100%; max-width: 100%; }
-
-/* AI ACTION BUTTONS */
-.ai-meta { display: flex; gap: 15px; margin-top: 15px; opacity: 0.5; transition: 0.3s; }
-.message:hover .ai-meta { opacity: 1; }
-.ai-meta span { cursor: pointer; font-size: 13px; display: flex; align-items: center; gap: 5px; color: #8e8ea0; }
-.ai-meta span:hover { color: var(--primary); }
-
-/* --- 8. INPUT AREA (PREMIUM) --- */
-.inputBar { padding: 20px 15%; background: linear-gradient(transparent, var(--main-dark)); }
-.inputBox { display: flex; align-items: center; gap: 15px; max-width: 850px; margin: auto; background: #2f2f2f; border-radius: 24px; padding: 12px 20px; border: 1px solid #444; transition: 0.3s ease; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
-.inputBox:focus-within { border-color: var(--primary); box-shadow: 0 0 0 2px rgba(16, 163, 127, 0.2); }
-input { flex: 1; background: none; border: none; color: white; outline: none; font-size: 16px; padding: 5px 0; }
-
-.plus-menu { position: absolute; bottom: 85px; left: 15%; width: 260px; background: #252525; border-radius: 16px; padding: 10px; display: none; flex-direction: column; z-index: 5000; border: 1px solid #333; box-shadow: 0 20px 50px rgba(0,0,0,0.6); }
-.plus-menu button { display: flex; align-items: center; gap: 14px; padding: 12px; border-radius: 10px; border: none; background: transparent; color: white; cursor: pointer; font-size: 14px; text-align: left; }
-.plus-menu button:hover { background: #333; color: var(--primary); }
-
-.actionBtn { width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; cursor: pointer; background: #40414f; transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-.sendActive { background: var(--primary); color: white; transform: scale(1.1); box-shadow: 0 0 15px var(--primary); }
-
-/* MODALS */
-.modal { position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(8px); display: none; justify-content: center; align-items: center; z-index: 9999; }
-.modal-content { background: #202123; padding: 40px; border-radius: 24px; width: 90%; max-width: 500px; border: 1px solid #333; text-align: center; }
-
-@media (max-width: 768px) {
-    .chat, .inputBar { padding: 15px 5%; }
-    .sidebar { position: fixed; left: -260px; height: 100%; }
-    .sidebar.open { left: 0; }
+body.light {
+    --main-bg: #ffffff;
+    --sidebar-bg: #f9f9f9;
+    --text-main: #111;
+    --border: rgba(0, 0, 0, 0.1);
+    --card-bg: #f0f0f0;
 }
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Inter', system-ui, -apple-system, sans-serif; height: 100vh; display: flex; background: var(--main-bg); color: var(--text-main); overflow: hidden; }
+
+/* --- 2. SPLASH SCREEN (PREMIUM ANIMATION) --- */
+#splash { position: fixed; inset: 0; background: #0f172a; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 10000; transition: opacity 0.8s ease; }
+.logo-container { width: 100px; height: 100px; border-radius: 22px; background: var(--primary); display: flex; align-items: center; justify-content: center; box-shadow: 0 0 30px rgba(16, 163, 127, 0.4); animation: breathe 2s infinite ease-in-out; }
+@keyframes breathe { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+#splash h2 { margin-top: 20px; color: white; letter-spacing: 2px; font-weight: 300; }
+
+/* --- 3. SIDEBAR (YOUR CORE STRUCTURE EXPANDED) --- */
+.sidebar { width: 280px; background: var(--sidebar-bg); display: flex; flex-direction: column; transition: var(--transition); border-right: 1px solid var(--border); z-index: 1000; overflow: hidden; }
+.sidebar.collapsed { width: 80px; }
+
+.sidebar-header { padding: 20px; display: flex; align-items: center; justify-content: space-between; }
+.logo-area { display: flex; align-items: center; gap: 12px; font-weight: 700; font-size: 18px; }
+.sidebar.collapsed .logo-area span { display: none; }
+
+/* BUTTONS STYLING */
+.nav-section { flex: 1; padding: 10px; overflow-y: auto; }
+.btn-nav { 
+    display: flex; align-items: center; gap: 12px; padding: 12px; border: none; border-radius: 12px; 
+    background: transparent; color: var(--text-main); cursor: pointer; width: 100%; transition: var(--transition); 
+    margin-bottom: 5px; font-size: 14px; font-weight: 500;
+}
+.btn-nav:hover { background: rgba(255, 255, 255, 0.05); }
+.btn-nav svg { width: 20px; height: 20px; stroke-width: 2; flex-shrink: 0; }
+.sidebar.collapsed .btn-nav span { display: none; }
+
+/* CHAT HISTORY SECTION */
+.history-label { font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; padding: 20px 10px 10px; }
+.chat-item { 
+    display: flex; align-items: center; justify-content: space-between; padding: 10px; border-radius: 10px; 
+    cursor: pointer; transition: 0.2s; position: relative; font-size: 14px;
+}
+.chat-item:hover { background: rgba(255, 255, 255, 0.05); }
+.chat-item .dots-trigger { opacity: 0; transition: 0.2s; padding: 5px; }
+.chat-item:hover .dots-trigger { opacity: 1; }
+
+/* --- 4. DROPDOWN MENUS (3-DOTS & PLUS) --- */
+.dropdown-menu {
+    position: absolute; background: #2a2a2a; border: 1px solid #444; border-radius: 14px; 
+    width: 220px; display: none; flex-direction: column; z-index: 5000; 
+    box-shadow: 0 10px 40px rgba(0,0,0,0.5); padding: 8px;
+}
+.dropdown-menu button {
+    display: flex; align-items: center; gap: 12px; background: none; border: none; 
+    color: white; padding: 12px; border-radius: 10px; cursor: pointer; font-size: 13px;
+}
+.dropdown-menu button:hover { background: #3a3a3a; }
+.dropdown-menu hr { border: none; border-top: 1px solid #444; margin: 6px 0; }
+
+/* --- 5. MAIN INTERFACE --- */
+.main-content { flex: 1; display: flex; flex-direction: column; position: relative; }
+
+/* TOPBAR */
+.topbar { height: 60px; padding: 0 20px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); }
+.model-badge { display: flex; align-items: center; gap: 8px; cursor: pointer; padding: 8px 12px; border-radius: 10px; font-weight: 600; }
+.model-badge:hover { background: var(--card-bg); }
+
+/* CHAT AREA & MESSAGES */
+.chat-container { flex: 1; padding: 20px 15%; overflow-y: auto; scrollbar-width: none; }
+.message-wrap { margin-bottom: 30px; display: flex; flex-direction: column; animation: fadeInUp 0.4s ease forwards; }
+@keyframes fadeInUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+.msg { max-width: 85%; padding: 16px 20px; border-radius: 18px; line-height: 1.6; font-size: 15px; }
+.msg.user { align-self: flex-end; background: #2f2f2f; color: white; border-bottom-right-radius: 4px; border: 1px solid var(--border); }
+.msg.bot { align-self: flex-start; background: transparent; padding-left: 0; width: 100%; }
+
+.bot-actions { display: flex; gap: 15px; margin-top: 10px; color: var(--text-muted); }
+.bot-actions span { cursor: pointer; font-size: 12px; display: flex; align-items: center; gap: 4px; }
+.bot-actions span:hover { color: var(--primary); }
+
+/* --- 6. INPUT BAR (MEGA DESIGN) --- */
+.input-section { padding: 20px 15%; position: relative; }
+.input-wrapper { 
+    max-width: 850px; margin: auto; background: var(--card-bg); border-radius: 24px; 
+    padding: 10px 18px; display: flex; align-items: center; gap: 15px; 
+    border: 1px solid var(--border); box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+}
+.input-wrapper input { flex: 1; background: none; border: none; color: inherit; outline: none; font-size: 16px; }
+
+.action-icon { width: 38px; height: 38px; border-radius: 12px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.3s; color: var(--text-muted); }
+.action-icon:hover { background: rgba(255,255,255,0.05); color: white; }
+.send-btn { background: #333; }
+.send-btn.active { background: var(--primary); color: white; box-shadow: 0 0 15px rgba(16, 163, 127, 0.4); }
+
+/* FOOTER */
+.disclaimer { font-size: 11px; text-align: center; color: var(--text-muted); margin-top: 12px; }
+
+/* --- 7. MODALS (PREMIUM UPGRADE) --- */
+.modal-overlay { 
+    position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(10px); 
+    display: none; justify-content: center; align-items: center; z-index: 9999; 
+}
+.modal-content { 
+    background: #1e1e1e; width: 90%; max-width: 450px; padding: 40px; border-radius: 30px; 
+    text-align: center; border: 1px solid #333; box-shadow: 0 20px 60px rgba(0,0,0,0.8);
+}
+.price-tag { font-size: 40px; font-weight: 800; margin: 20px 0; color: var(--primary); }
+
 </style>
 </head>
 
 <body class="dark">
 
 <div id="splash">
-    <div id="logoAnim"><img src="logo.png" style="width:100%; height:100%; object-fit:cover;" onerror="this.style.display='none'"></div>
+    <div class="logo-container"><b style="color:white; font-size:40px;">S</b></div>
+    <h2>STUDYGENIUS AI</h2>
 </div>
 
-<div id="app" style="display:none; width:100%; height:100vh;">
+<div id="app" style="display:none; width:100%; height:100vh; display:flex;">
 
     <div class="sidebar" id="sidebar">
-        <div>
-            <div class="logoRow">
-                <div class="logoWrap">S</div>
-                <div style="font-weight:700; font-size:18px;">StudyGenius</div>
-                <div class="toggleBtn" onclick="toggleSidebar()">☰</div>
+        <div class="sidebar-header">
+            <div class="logo-area">
+                <div style="width:24px; height:24px; background:var(--primary); border-radius:5px;"></div>
+                <span>StudyGenius</span>
             </div>
+            <div class="action-icon" onclick="toggleSidebar()">☰</div>
+        </div>
 
-            <button class="btn" onclick="location.reload()" style="background:rgba(255,255,255,0.05); margin-top:10px;">
-                <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg><span>New Chat</span>
+        <div class="nav-section">
+            <button class="btn-nav" onclick="location.reload()" style="background:var(--primary); color:white;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 5v14M5 12h14"/></svg>
+                <span>New chat</span>
+            </button>
+            <button class="btn-nav">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg>
+                <span>Search history</span>
+            </button>
+            <button class="btn-nav">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M16 18l6-6-6-6M8 6l-6 6 6 6"/></svg>
+                <span>Codex AI</span>
+            </button>
+            <button class="btn-nav">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+                <span>Projects</span>
+            </button>
+            <button class="btn-nav">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+                <span>Deep Search</span>
             </button>
 
-            <div class="yourChats">Tools & Workspace</div>
-            <button class="btn"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg><span>Deep Search</span></button>
-            <button class="btn"><svg viewBox="0 0 24 24"><path d="M16 18l6-6-6-6M8 6l-6 6 6 6"/></svg><span>Codex AI</span></button>
-            <button class="btn"><svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg><span>Study Projects</span></button>
-
-            <div class="yourChats">Recent History</div>
-            <div class="chatItem">
-                <div class="left"><div class="dot"></div><span>Quantum Physics...</span></div>
-                <div onclick="toggleMenu3(event)">⋯</div>
-                <div class="menu3">
+            <div class="history-label">Yesterday</div>
+            <div class="chat-item">
+                <div style="display:flex; align-items:center; gap:10px;">
+                    <div style="width:8px; height:8px; background:var(--primary); border-radius:50%;"></div>
+                    <span>Quantum Physics Notes</span>
+                </div>
+                <div class="dots-trigger" onclick="openHistoryMenu(event)">⋯</div>
+                <div class="dropdown-menu history-menu" style="left: 200px;">
                     <button>🔗 Share Chat</button>
                     <button>✏️ Rename</button>
                     <button>📌 Pin to Top</button>
@@ -141,201 +187,179 @@ input { flex: 1; background: none; border: none; color: white; outline: none; fo
             </div>
         </div>
 
-        <div>
-            <div style="background:rgba(16, 163, 127, 0.1); padding:15px; border-radius:12px; border:1px solid rgba(16,163,127,0.3); margin-bottom:10px;">
-                <div style="font-size:13px; font-weight:700; color:var(--primary);">StudyGenius Plus</div>
-                <div style="font-size:11px; color:#aaa; margin-top:4px;">Get 10x faster replies & file uploads</div>
-                <button onclick="openModal()" style="width:100%; margin-top:10px; padding:8px; border-radius:8px; border:none; background:var(--primary); color:white; font-size:12px; font-weight:bold; cursor:pointer;">Upgrade</button>
+        <div style="padding:15px; border-top:1px solid var(--border);">
+            <div style="background:rgba(16,163,127,0.1); padding:15px; border-radius:18px; margin-bottom:15px;">
+                <div style="font-size:13px; font-weight:700; color:var(--primary);">Upgrade to Pro</div>
+                <div style="font-size:11px; color:var(--text-muted); margin-top:4px;">Get 10x more features</div>
+                <button onclick="toggleModal(true)" style="width:100%; margin-top:10px; background:var(--primary); border:none; color:white; padding:8px; border-radius:10px; font-weight:bold; cursor:pointer;">Upgrade</button>
             </div>
-            <div class="account" style="margin-top:10px;">
-                <div class="avatar" style="background:#3b82f6; display:flex; align-items:center; justify-content:center; font-weight:bold;">P</div>
-                <div class="accInfo">
-                    <div class="accName">Pranab User</div>
-                    <div class="plan">Free Explorer</div>
+            <div style="display:flex; align-items:center; gap:12px;">
+                <div style="width:36px; height:36px; border-radius:50%; background:#444;"></div>
+                <div class="acc-info">
+                    <div style="font-size:14px; font-weight:600;">Pranab</div>
+                    <div style="font-size:11px; color:var(--text-muted);">Free Plan</div>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="main">
+    <div class="main-content">
         <div class="topbar">
-            <div style="display:flex; align-items:center; gap:10px;">
-                <div class="toggleBtn" onclick="toggleSidebar()" style="display:none;" id="mobileToggle">☰</div>
-                <div style="font-weight:700; font-size:16px; cursor:pointer;" onclick="toggleDrop(event, 'model-menu')">
-                    Genius 4.0 Pro <small>▼</small>
-                </div>
-                <div id="model-menu" class="menu3" style="top:50px; left:20px;">
-                    <button>✨ Genius Ultra (Smartest)</button>
-                    <button>⚡ Genius Turbo (Fastest)</button>
+            <div class="model-badge" onclick="openModelMenu(event)">
+                StudyGenius 4o Pro <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M6 9l6 6 6-6"/></svg>
+                <div class="dropdown-menu" id="model-dropdown" style="top:50px; left:20px;">
+                    <button>✨ StudyGenius Ultra (Best for Exams)</button>
+                    <button>⚡ StudyGenius Flash (Fastest)</button>
                     <button>🎓 Academic Expert</button>
                 </div>
             </div>
-
             <div style="display:flex; align-items:center; gap:15px;">
-                <div class="plan-capsule" onclick="openModal()">Free Plan</div>
-                <div class="icon" onclick="toggleTheme()" style="font-size:20px;">🌗</div>
+                <button style="background:rgba(255,255,255,0.05); border:1px solid var(--border); color:inherit; padding:6px 14px; border-radius:20px; font-size:12px; cursor:pointer;">Share</button>
+                <div class="action-icon" onclick="toggleTheme()">🌗</div>
             </div>
         </div>
 
-        <div class="chat" id="chat">
-            <div id="hero">
-                <h1>What can I help you learn today?</h1>
-                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px; max-width:600px; width:100%;">
-                    <div class="chatItem" style="border:1px solid #444; padding:15px; text-align:left;" onclick="q.value='Explain Quantum Entanglement simply'; handleAction()">
-                        <b>Explain</b><br><small style="color:#888;">Quantum Entanglement simply</small>
+        <div class="chat-container" id="chatArea">
+            <div style="height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center;" id="hero">
+                <h1 style="font-size:38px; font-weight:800; margin-bottom:15px;">How can I help you today?</h1>
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px; width:100%; max-width:650px;">
+                    <div class="chat-item" style="border:1px solid var(--border); padding:20px; text-align:left; flex-direction:column; align-items:start;" onclick="quickMsg('Explain photosynthesis simply')">
+                        <b>Explain</b><p style="color:var(--text-muted); font-size:12px;">photosynthesis in simple terms</p>
                     </div>
-                    <div class="chatItem" style="border:1px solid #444; padding:15px; text-align:left;" onclick="q.value='Write a study plan for Finals'; handleAction()">
-                        <b>Create</b><br><small style="color:#888;">A study plan for my finals</small>
+                    <div class="chat-item" style="border:1px solid var(--border); padding:20px; text-align:left; flex-direction:column; align-items:start;" onclick="quickMsg('Create a 7-day study schedule')">
+                        <b>Plan</b><p style="color:var(--text-muted); font-size:12px;">a 7-day study schedule for exams</p>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="inputBar">
-            <div class="plus-menu" id="plusMenu">
-                <button>📄 Upload PDF/Docs</button>
+        <div class="input-section">
+            <div class="dropdown-menu" id="plus-menu" style="bottom:80px; left:15%; width:280px;">
+                <button>📄 Upload PDF / Files</button>
                 <button>📸 Scan Handwritten Notes</button>
-                <button>📝 Exam Simulation Mode</button>
-                <button>📊 Subject Performance</button>
+                <button>📒 Generate Smart Summary</button>
+                <button>🎯 Exam Preparation Mode</button>
                 <button>📅 Study Planner</button>
+                <button>🎧 Audio Note Transcription</button>
             </div>
 
-            <div class="inputBox">
-                <div class="icon" onclick="togglePlus(event)" style="font-size:22px; color:var(--primary);">＋</div>
-                <input id="q" placeholder="Message StudyGenius AI..." oninput="updateUI()" onkeydown="if(event.key==='Enter') handleAction()">
-                <div class="icon" title="Voice Search">🎤</div>
-                <div class="actionBtn" id="actionBtn" onclick="handleAction()">
-                    <svg id="icon" width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M4 10h2v4H4zm4-3h2v10H8zm4-4h2v18h-2zm4 3h2v10h-2zm4 4h2v4h-2z"/>
-                    </svg>
+            <div class="input-wrapper">
+                <div class="action-icon" onclick="openPlusMenu(event)" style="color:var(--primary); font-size:24px;">＋</div>
+                <input type="text" id="userInput" placeholder="Ask StudyGenius AI anything..." oninput="handleInput()" onkeydown="if(event.key==='Enter') sendMessage()">
+                <div class="action-icon" title="Voice Input">🎤</div>
+                <div class="action-icon send-btn" id="sendBtn" onclick="sendMessage()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
                 </div>
             </div>
-            <div class="disclaimer-small">StudyGenius AI can make mistakes. Check important information.</div>
+            <div class="disclaimer">StudyGenius AI can make mistakes. Check important information.</div>
         </div>
     </div>
 </div>
 
-<div id="upgradeModal" class="modal" onclick="this.style.display='none'">
+<div id="upgradeModal" class="modal-overlay" onclick="toggleModal(false)">
     <div class="modal-content" onclick="event.stopPropagation()">
-        <h2 style="margin-bottom:10px;">Unleash Full Potential</h2>
-        <p style="color:#8e8ea0; margin-bottom:25px;">Get the most advanced academic AI at your fingertips.</p>
-        <div style="background:rgba(16,163,127,0.1); padding:20px; border-radius:20px; border:1px solid var(--primary); margin-bottom:20px;">
-            <div style="font-size:28px; font-weight:800;">$9.99<small style="font-size:14px; color:#888;">/mo</small></div>
-            <ul style="text-align:left; font-size:14px; margin-top:15px; line-height:2;">
-                <li>✅ Unlimited File & Image Uploads</li>
-                <li>✅ Genius Ultra-4o Model Access</li>
-                <li>✅ No Daily Message Limits</li>
-                <li>✅ Priority Study Support</li>
-            </ul>
-        </div>
-        <button class="btn" style="background:var(--primary); color:white; justify-content:center; font-weight:800; padding:15px;">Upgrade Now</button>
+        <h2 style="font-size:24px;">Unlock Ultimate Study Tools</h2>
+        <div class="price-tag">$9.99<small style="font-size:14px; color:var(--text-muted);">/month</small></div>
+        <ul style="text-align:left; font-size:14px; color:var(--text-muted); line-height:2.2; margin-bottom:30px;">
+            <li>✅ Unlimited PDF & Image Analysis</li>
+            <li>✅ Genius-4o Ultra Response Speed</li>
+            <li>✅ Advanced Exam Simulation Mode</li>
+            <li>✅ Multi-Language Study Support</li>
+        </ul>
+        <button style="width:100%; padding:15px; background:var(--primary); color:white; border:none; border-radius:15px; font-weight:bold; cursor:pointer; font-size:16px;">Upgrade Now</button>
+        <p style="margin-top:15px; font-size:12px; cursor:pointer;" onclick="toggleModal(false)">Stay on Free Plan</p>
     </div>
 </div>
 
 <script>
-// 1. LOADING & SPLASH
+// INITIALIZATION
 window.onload = () => {
     setTimeout(() => {
         const splash = document.getElementById('splash');
         splash.style.opacity = '0';
-        splash.style.transform = 'scale(1.1)';
-        setTimeout(() => { splash.style.display = 'none'; document.getElementById('app').style.display = 'flex'; }, 600);
+        setTimeout(() => { splash.style.display = 'none'; document.getElementById('app').style.display = 'flex'; }, 800);
     }, 1800);
 };
 
-// 2. SIDEBAR TOGGLE
-function toggleSidebar() {
-    const sb = document.getElementById('sidebar');
-    sb.classList.toggle('collapsed');
+function toggleSidebar() { document.getElementById('sidebar').classList.toggle('collapsed'); }
+function toggleTheme() { document.body.classList.toggle('light'); document.body.classList.toggle('dark'); }
+
+// DROPDOWNS LOGIC
+function closeAllMenus() { document.querySelectorAll('.dropdown-menu').forEach(m => m.style.display = 'none'); }
+
+function openPlusMenu(e) {
+    e.stopPropagation(); closeAllMenus();
+    document.getElementById('plus-menu').style.display = 'flex';
 }
 
-// 3. UI UPDATES
-function updateUI() {
-    const val = q.value.trim();
-    const btn = document.getElementById('actionBtn');
-    const icon = document.getElementById('icon');
-    if (val) {
-        btn.classList.add('sendActive');
-        icon.innerHTML = `<path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>`;
-    } else {
-        btn.classList.remove('sendActive');
-        icon.innerHTML = `<path d="M4 10h2v4H4zm4-3h2v10H8zm4-4h2v18h-2zm4 3h2v10h-2zm4 4h2v4h-2z"/>`;
-    }
+function openModelMenu(e) {
+    e.stopPropagation(); closeAllMenus();
+    document.getElementById('model-dropdown').style.display = 'flex';
 }
 
-// 4. CHAT HANDLER
-function handleAction() {
-    const val = q.value.trim();
-    if (!val) return;
+function openHistoryMenu(e) {
+    e.stopPropagation(); closeAllMenus();
+    e.target.nextElementSibling.style.display = 'flex';
+}
 
-    // Hide Hero
-    const hero = document.getElementById('hero');
-    if (hero) hero.style.display = 'none';
+document.addEventListener('click', closeAllMenus);
 
-    const chat = document.getElementById('chat');
-    
+// MODAL LOGIC
+function toggleModal(show) { document.getElementById('upgradeModal').style.display = show ? 'flex' : 'none'; }
+
+// INPUT & CHAT LOGIC
+function handleInput() {
+    const val = document.getElementById('userInput').value.trim();
+    const btn = document.getElementById('sendBtn');
+    if(val) btn.classList.add('active');
+    else btn.classList.remove('active');
+}
+
+function sendMessage() {
+    const input = document.getElementById('userInput');
+    const val = input.value.trim();
+    if(!val) return;
+
+    document.getElementById('hero').style.display = 'none';
+    const chatArea = document.getElementById('chatArea');
+
     // User Msg
-    const uMsg = document.createElement('div');
-    uMsg.className = 'message user';
-    uMsg.innerText = val;
-    chat.appendChild(uMsg);
+    const uWrap = document.createElement('div');
+    uWrap.className = 'message-wrap';
+    uWrap.innerHTML = `<div class="msg user">${val}</div>`;
+    chatArea.appendChild(uWrap);
 
-    // Bot Msg Frame
-    const bMsg = document.createElement('div');
-    bMsg.className = 'message bot';
-    bMsg.innerHTML = `
-        <div style="font-weight:700; color:var(--primary); margin-bottom:8px;">StudyGenius AI</div>
-        <div class="ai-text">Analyzing your query and preparing educational insights...</div>
-        <div class="ai-meta">
-            <span>📋 Copy</span>
-            <span>👍 Like</span>
-            <span>👎 Dislike</span>
-            <span>🔄 Regenerate</span>
-        </div>
-    `;
-    chat.appendChild(bMsg);
+    // Bot Msg
+    const bWrap = document.createElement('div');
+    bWrap.className = 'message-wrap';
+    bWrap.innerHTML = `
+        <div class="msg bot">
+            <div style="font-weight:700; color:var(--primary); margin-bottom:10px;">StudyGenius AI</div>
+            <div class="typing-text">Analysing academic resources...</div>
+            <div class="bot-actions">
+                <span>📋 Copy</span>
+                <span>👍 Helpful</span>
+                <span>👎 Not helpful</span>
+                <span>🔄 Regenerate</span>
+            </div>
+        </div>`;
+    chatArea.appendChild(bWrap);
 
-    q.value = '';
-    updateUI();
-    chat.scrollTop = chat.scrollHeight;
+    input.value = '';
+    handleInput();
+    chatArea.scrollTop = chatArea.scrollHeight;
 
-    // Simulation response
     setTimeout(() => {
-        bMsg.querySelector('.ai-text').innerHTML = `Here is the academic breakdown for <b>"${val}"</b>. As an AI Study assistant, I recommend focusing on the core principles of this topic. Would you like me to generate a practice quiz based on this?`;
-        chat.scrollTop = chat.scrollHeight;
+        bWrap.querySelector('.typing-text').innerHTML = `Here is a structured explanation for your topic. Based on Genius 4.0 analysis, I've highlighted the key formulas and concepts for your upcoming exams. <br><br><b>Key Takeaway:</b> Focus on the core derivation.`;
+        chatArea.scrollTop = chatArea.scrollHeight;
     }, 1500);
 }
 
-// 5. DROP MENUS
-function togglePlus(e) {
-    e.stopPropagation();
-    closeAll();
-    const pm = document.getElementById('plusMenu');
-    pm.style.display = pm.style.display === 'flex' ? 'none' : 'flex';
+function quickMsg(text) {
+    document.getElementById('userInput').value = text;
+    handleInput();
+    sendMessage();
 }
-
-function toggleDrop(e, id) {
-    e.stopPropagation();
-    closeAll();
-    const m = document.getElementById(id);
-    m.style.display = m.style.display === 'flex' ? 'none' : 'flex';
-}
-
-function toggleMenu3(e) {
-    e.stopPropagation();
-    closeAll();
-    const m = e.target.nextElementSibling;
-    m.style.display = 'flex';
-}
-
-function closeAll() {
-    document.querySelectorAll('.plus-menu, .menu3').forEach(m => m.style.display = 'none');
-}
-
-document.addEventListener('click', closeAll);
-
-function openModal() { document.getElementById('upgradeModal').style.display = 'flex'; }
-function toggleTheme() { document.body.classList.toggle('light'); document.body.classList.toggle('dark'); }
 </script>
 
 </body>
