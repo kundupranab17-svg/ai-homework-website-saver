@@ -3,415 +3,340 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StudyGenius Pro | The Ultimate AI</title>
+    <title>StudyGenius AI | Pro</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #10a37f;
-            --sidebar-dark: #171717;
-            --main-bg: #212121;
-            --input-bg: #2f2f2f;
-            --text-gray: #b4b4b4;
-            --border-light: rgba(255,255,255,0.1);
+            --bg-main: #ffffff;
+            --sidebar: #f7f7f8;
+            --text-color: #1f1f1f;
+            --border-color: #e5e7eb;
+            --logo-gradient: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
+            --premium-gradient: linear-gradient(135deg, #10b981, #3b82f6, #8b5cf6);
+        }
+
+        .dark-mode {
+            --bg-main: #0d0d0d;
+            --sidebar: #171717;
+            --text-color: #ececec;
+            --border-color: #2d2d2d;
         }
 
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--main-bg);
-            color: white;
-            margin: 0;
-            display: flex;
-            height: 100vh;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-color);
+            transition: background 0.4s ease;
             overflow: hidden;
         }
 
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #3f3f3f; border-radius: 10px; }
-
-        /* Sidebar Styling */
-        .sidebar {
-            width: 260px;
-            background-color: var(--sidebar-dark);
-            height: 100%;
+        /* --- LOGO STYLING --- */
+        .logo-circle {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: var(--premium-gradient);
             display: flex;
-            flex-direction: column;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            z-index: 50;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+            color: white;
+            font-weight: 700;
+            flex-shrink: 0;
         }
 
-        .nav-item {
+        /* --- INTRO ANIMATION --- */
+        #intro-screen {
+            position: fixed;
+            inset: 0;
+            background: #000;
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.6s ease-out;
+        }
+
+        .intro-content {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            position: relative;
+        }
+
+        .intro-logo {
+            width: 70px;
+            height: 70px;
+            background: var(--premium-gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 30px;
+            font-weight: bold;
+            z-index: 2;
+            transition: transform 1.2s cubic-bezier(0.87, 0, 0.13, 1);
+        }
+
+        .intro-text {
+            font-size: 38px;
+            font-weight: 800;
+            background: var(--premium-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            opacity: 0;
+            transform: translateX(-50px);
+            transition: all 1s ease;
+            margin-left: 15px;
+        }
+
+        .reveal .intro-logo { transform: translateX(-140px); }
+        .reveal .intro-text { opacity: 1; transform: translateX(-120px); }
+
+        /* --- UI COMPONENTS --- */
+        .sidebar {
+            width: 280px;
+            background: var(--sidebar);
+            border-right: 1px solid var(--border-color);
+        }
+
+        .premium-menu {
+            position: absolute;
+            bottom: 70px;
+            left: 10px;
+            width: 240px;
+            background: var(--sidebar);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            display: none;
+            z-index: 100;
+            padding: 8px;
+        }
+
+        .menu-opt {
             display: flex;
             align-items: center;
             gap: 12px;
-            padding: 10px 12px;
-            margin: 2px 8px;
-            border-radius: 8px;
+            padding: 10px;
+            border-radius: 10px;
             cursor: pointer;
-            color: #ececf1;
             font-size: 14px;
             transition: background 0.2s;
         }
 
-        .nav-item:hover { background-color: #2a2a2a; }
-        .nav-item svg { width: 18px; height: 18px; color: #acacbe; }
+        .menu-opt:hover { background: rgba(128,128,128,0.1); }
+        .text-red { color: #ff4757; }
 
-        /* Dropdowns */
-        .premium-dropdown {
-            position: absolute;
-            top: 55px;
-            left: 20px;
-            background: #2f2f2f;
-            border: 1px solid var(--border-light);
-            border-radius: 12px;
-            width: 280px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-            display: none;
-            z-index: 100;
-        }
-
-        .plus-menu {
-            position: absolute;
-            bottom: 85px;
-            left: 0;
-            background: #2f2f2f;
-            border: 1px solid var(--border-light);
-            border-radius: 16px;
-            width: 320px;
-            display: none;
-            flex-direction: column;
-            padding: 8px;
-            z-index: 100;
-        }
-
-        .plus-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-
-        .plus-item:hover { background: #3f3f3f; }
-        .plus-item .icon-bg {
-            width: 32px; height: 32px; border-radius: 8px;
-            display: flex; align-items: center; justify-content: center;
-        }
-
-        /* Chat System */
-        .chat-container {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            position: relative;
-        }
-
-        .chat-messages {
-            flex: 1;
-            overflow-y: auto;
-            padding: 20px 0;
-        }
-
-        .message-bubble {
-            max-width: 800px;
-            margin: 0 auto 30px auto;
-            display: flex;
-            gap: 20px;
-            padding: 0 20px;
-        }
-
-        .avatar {
-            width: 32px; height: 32px; border-radius: 4px; flex-shrink: 0;
-            display: flex; align-items: center; justify-content: center;
-        }
-
-        /* Input Bar */
-        .input-area {
-            padding: 20px 0;
-            background: linear-gradient(transparent, var(--main-bg) 20%);
-        }
-
-        .input-box-wrapper {
-            max-width: 800px;
+        /* --- DYNAMIC INPUT --- */
+        .input-wrapper {
+            max-width: 850px;
+            width: 100%;
             margin: 0 auto;
-            background: var(--input-bg);
-            border-radius: 26px;
-            padding: 8px 14px;
-            display: flex;
-            align-items: flex-end;
-            gap: 8px;
-            border: 1px solid var(--border-light);
             position: relative;
         }
 
-        .chat-input {
-            flex: 1;
-            background: transparent;
-            border: none;
-            color: white;
-            outline: none;
-            padding: 10px 4px;
-            font-size: 16px;
-            line-height: 24px;
-            resize: none;
-            max-height: 200px;
+        .footer-disclaimer {
+            font-size: 11px;
+            color: #888;
+            text-align: center;
+            margin-top: 10px;
+            width: 100%;
         }
 
-        .icon-btn {
-            width: 36px; height: 36px; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            cursor: pointer; transition: 0.2s; color: #acacbe;
-        }
+        .hidden { display: none !important; }
 
-        .icon-btn:hover { background: #454545; color: white; }
-        .send-btn-active { background: white !important; color: black !important; }
-
-        /* Status Animations */
-        @keyframes pulse { 0% { opacity: 0.5; } 50% { opacity: 1; } 100% { opacity: 0.5; } }
-        .listening { animation: pulse 1.5s infinite; color: #ff4b4b !important; }
     </style>
 </head>
 <body>
 
-    <aside class="sidebar" id="sidebar">
-        <div class="p-4 mb-2">
-            <button class="nav-item w-full !m-0 !justify-start bg-transparent border border-[rgba(255,255,255,0.1)] hover:bg-[#2a2a2a]" onclick="location.reload()">
-                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-                <span>New Chat</span>
-            </button>
+    <div id="intro-screen">
+        <div class="intro-content" id="intro-trigger">
+            <div class="intro-logo">S</div>
+            <div class="intro-text">StudyGenius AI</div>
         </div>
+    </div>
 
-        <div class="flex-1 overflow-y-auto">
-            <div class="nav-item"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg><span>Search Chat</span></div>
-            <div class="nav-item"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg><span>Images</span></div>
-            <div class="nav-item"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg><span>Apps</span></div>
-            <div class="nav-item"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg><span>Deep Search</span></div>
-            <div class="nav-item"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg><span>Codex AI</span></div>
-            <div class="nav-item"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/></svg><span>Projects</span></div>
-
-            <div class="px-4 mt-6 mb-2 text-xs font-semibold text-gray-500 uppercase">Your Chats</div>
-            <div class="nav-item"><span>Algebra Homework</span></div>
-            <div class="nav-item"><span>History Notes Correction</span></div>
-        </div>
-
-        <div class="p-2 border-t border-[rgba(255,255,255,0.05)]">
-            <div class="nav-item !mb-0" onclick="alert('Upgrade to Premium!')">
-                <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-purple-500 to-pink-500 flex items-center justify-center text-xs font-bold">P</div>
-                <div class="flex-1">
-                    <div class="text-sm font-medium">Pranab Kumar</div>
-                    <div class="text-xs text-gray-500">Premium Offers</div>
-                </div>
-            </div>
-        </div>
-    </aside>
-
-    <main class="chat-container">
-        
-        <header class="h-[60px] px-4 flex items-center gap-2 relative">
-            <div class="flex items-center gap-2 cursor-pointer hover:bg-[#2f2f2f] p-2 rounded-lg" id="modelTrigger">
-                <div class="w-7 h-7 bg-[#10a37f] rounded-full flex items-center justify-center">
-                    <svg class="w-4 h-4 text-white" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-                </div>
-                <span class="font-semibold text-lg">Genius 4.0</span>
-                <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg>
+    <div class="flex h-screen w-full">
+        <aside class="sidebar flex flex-col p-4">
+            <div class="flex items-center gap-3 mb-10 px-2">
+                <div class="logo-circle">S</div>
+                <span class="font-bold text-lg tracking-tight">StudyGenius AI</span>
             </div>
 
-            <div class="premium-dropdown" id="modelMenu">
-                <div class="p-3 border-b border-[rgba(255,255,255,0.05)] flex justify-between items-center bg-[#363636] rounded-t-xl">
-                    <span class="text-xs font-bold text-gray-400">SELECT PACKAGE</span>
+            <div class="flex-1 overflow-y-auto space-y-1">
+                <div class="text-[11px] font-bold text-gray-400 uppercase tracking-widest mb-2 px-2">History</div>
+                <div class="flex items-center gap-2 p-3 hover:bg-gray-200 dark:hover:bg-zinc-800 rounded-xl cursor-pointer text-sm">
+                    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                    New Discussion
                 </div>
-                <div class="p-2">
-                    <div class="p-3 hover:bg-[#3f3f3f] rounded-lg cursor-pointer border border-transparent hover:border-green-500 mb-1">
-                        <div class="font-bold">StudyGenius 1.0</div>
-                        <div class="text-xs text-gray-400">Free Trial for 3 Days</div>
+            </div>
+
+            <div class="relative pt-4 border-t border-gray-200 dark:border-zinc-800">
+                <div class="flex items-center justify-between p-2 cursor-pointer hover:bg-gray-200 dark:hover:bg-zinc-800 rounded-xl" onclick="toggleElement('sidebar-3dot')">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-500 to-purple-500"></div>
+                        <span class="text-sm font-semibold">Premium Member</span>
                     </div>
-                    <div class="p-3 hover:bg-[#3f3f3f] rounded-lg cursor-pointer border border-transparent hover:border-purple-500 mb-1">
-                        <div class="flex justify-between font-bold"><span>Genius 2.0</span> <span class="text-green-500">$5/mo</span></div>
-                        <div class="text-xs text-gray-400">Advanced Academic Analysis</div>
-                    </div>
-                    <div class="p-3 hover:bg-[#3f3f3f] rounded-lg cursor-pointer border border-green-600 bg-[#10a37f10]">
-                        <div class="flex justify-between font-bold"><span>Ultra 3.0</span> <span class="text-green-500">$10/mo</span></div>
-                        <div class="text-xs text-green-400 font-medium">Dangerous! All Features Unlocked</div>
-                    </div>
+                    <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M12 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0-6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 12c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
                 </div>
-            </div>
-        </header>
-
-        <div class="chat-messages" id="chatMessages">
-            <div class="flex flex-col items-center justify-center h-full text-center px-4" id="emptyState">
-                <div class="w-16 h-16 bg-[#2f2f2f] rounded-full flex items-center justify-center mb-4">
-                    <svg class="w-10 h-10 text-white" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-                </div>
-                <h2 class="text-3xl font-bold mb-2">StudyGenius Ultra</h2>
-                <p class="text-gray-400 max-w-md">Your AI partner for Exams, Notes, and Planning. Upload a photo or start typing.</p>
-            </div>
-        </div>
-
-        <div class="input-area">
-            <div class="input-box-wrapper">
                 
-                <div class="relative">
-                    <div class="icon-btn" id="plusTrigger">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
-                    </div>
-
-                    <div class="plus-menu" id="plusMenu">
-                        <div class="plus-item" onclick="openTool('Exam Mode')">
-                            <div class="icon-bg bg-orange-500"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg></div>
-                            <div><div class="font-semibold text-sm">Exam Mode</div><div class="text-xs text-gray-400">Step-by-step & Important Qs</div></div>
-                        </div>
-                        <div class="plus-item" onclick="openTool('Handwritten Notes')">
-                            <div class="icon-bg bg-blue-500"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg></div>
-                            <div><div class="font-semibold text-sm">Notes Generator</div><div class="text-xs text-gray-400">Handwritten & Cheat Sheets</div></div>
-                        </div>
-                        <div class="plus-item" onclick="openTool('Practice Paper')">
-                            <div class="icon-bg bg-purple-500"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10l4 4v10a2 2 0 01-2 2z"/><path d="M14 2v6h6"/></svg></div>
-                            <div><div class="font-semibold text-sm">Practice Paper</div><div class="text-xs text-gray-400">20 Year AI Analysis</div></div>
-                        </div>
-                        <div class="plus-item" onclick="openTool('Study Planner')">
-                            <div class="icon-bg bg-green-500"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2-2v12a2 2 0 002 2z"/></svg></div>
-                            <div><div class="font-semibold text-sm">Study Planner</div><div class="text-xs text-gray-400">Routine & Correction</div></div>
-                        </div>
-                        <hr class="border-[rgba(255,255,255,0.05)] my-1">
-                        <div class="plus-item">
-                            <div class="icon-bg bg-[#3f3f3f]"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg></div>
-                            <div class="font-semibold text-sm">Upload Photo</div>
-                        </div>
-                        <div class="p-2">
-                           <button class="w-full py-2 bg-[#3f3f3f] rounded-lg text-xs font-bold hover:bg-[#4f4f4f] flex items-center justify-center gap-2">
-                             MORE TOOLS
-                             <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7"/></svg>
-                           </button>
-                        </div>
-                    </div>
-                </div>
-
-                <textarea id="mainInput" class="chat-input" placeholder="Message StudyGenius..." rows="1"></textarea>
-                
-                <div class="flex items-center gap-1">
-                    <div class="icon-btn" id="micBtn" onclick="toggleMic()">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"/></svg>
-                    </div>
-                    <div class="icon-btn" id="actionBtn" onclick="handleSend()">
-                        <svg id="sendIcon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                    </div>
+                <div id="sidebar-3dot" class="premium-menu">
+                    <div class="menu-opt"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg> Share</div>
+                    <div class="menu-opt"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> Group Chat</div>
+                    <div class="menu-opt text-red"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg> Delete Account</div>
                 </div>
             </div>
-            <div class="disclaimer">StudyGenius AI can make mistakes. Multi-language support enabled.</div>
-        </div>
-    </main>
+        </aside>
+
+        <main class="flex-1 flex flex-col relative overflow-hidden">
+            <header class="h-16 flex items-center justify-between px-6 border-b border-gray-100 dark:border-zinc-900">
+                <div class="flex items-center gap-2 cursor-pointer text-sm font-bold opacity-70">
+                    Genius 3.0 Ultra <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>
+                </div>
+
+                <div class="flex items-center gap-5">
+                    <div id="new-chat-top" class="flex items-center gap-5">
+                        <button title="Group Chat"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></button>
+                        <button title="Temporary Chat"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></button>
+                    </div>
+
+                    <div id="active-chat-top" class="hidden flex items-center gap-5">
+                        <div class="relative cursor-pointer" onclick="toggleElement('active-3dot')">
+                            <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M6 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
+                            <div id="active-3dot" class="premium-menu top-10 right-0 left-auto">
+                                <div class="menu-opt"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Rename</div>
+                                <div class="menu-opt"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/></svg> Archive</div>
+                                <div class="menu-opt text-red"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg> Delete</div>
+                            </div>
+                        </div>
+                        <button class="bg-zinc-100 dark:bg-zinc-800 py-1.5 px-4 rounded-full text-xs font-bold flex items-center gap-2">
+                            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/></svg> Share
+                        </button>
+                    </div>
+
+                    <button id="theme-btn" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-zinc-800 transition">
+                        <svg id="theme-icon" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                    </button>
+                </div>
+            </header>
+
+            <div class="flex-1 overflow-y-auto px-6 py-10 flex flex-col items-center justify-center" id="main-area">
+                <div id="welcome-msg" class="text-center">
+                    <div class="logo-circle mx-auto w-16 h-16 text-2xl mb-6 shadow-2xl">S</div>
+                    <h2 class="text-3xl font-extrabold tracking-tight">Focus on Learning, We'll do the rest.</h2>
+                </div>
+            </div>
+
+            <div class="p-6">
+                <div class="input-wrapper">
+                    <div id="plus-popover" class="premium-menu bottom-[100%] left-0 mb-4 w-[280px]">
+                        <div class="menu-opt"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14.5 2 14.5 7.5 20 7.5"/></svg> Exam Mode</div>
+                        <div class="menu-opt"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg> Notes Generator</div>
+                        <div class="menu-opt"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg> Upload Photo / Files</div>
+                        <hr class="my-2 border-gray-200 dark:border-zinc-800">
+                        <div class="menu-opt font-bold text-blue-500"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg> More Tools (Web, Canvas)</div>
+                    </div>
+
+                    <div class="bg-zinc-100 dark:bg-zinc-800/50 border border-transparent focus-within:border-gray-300 dark:focus-within:border-zinc-700 rounded-[24px] p-2 flex items-end gap-2 transition-all">
+                        <button onclick="toggleElement('plus-popover')" class="p-3 hover:bg-gray-200 dark:hover:bg-zinc-700 rounded-full transition">
+                            <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                        </button>
+                        
+                        <textarea id="main-input" rows="1" placeholder="Ask StudyGenius anything..." class="w-full bg-transparent border-none focus:ring-0 py-3 px-2 resize-none max-h-52 text-sm md:text-base"></textarea>
+                        
+                        <div class="flex items-center gap-1 pr-1">
+                            <button class="p-3 text-gray-400 hover:text-white transition"><svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/></svg></button>
+                            <button id="send-btn" class="p-3 bg-zinc-300 dark:bg-zinc-700 rounded-2xl text-zinc-500 transition-all">
+                                <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+                            </button>
+                        </div>
+                    </div>
+                    <p class="footer-disclaimer">StudyGenius AI can make mistakes. Verify important facts.</p>
+                </div>
+            </div>
+        </main>
+    </div>
 
     <script>
-        const input = document.getElementById('mainInput');
-        const actionBtn = document.getElementById('actionBtn');
-        const sendIcon = document.getElementById('sendIcon');
-        const chatMessages = document.getElementById('chatMessages');
-        const emptyState = document.getElementById('emptyState');
-        const plusTrigger = document.getElementById('plusTrigger');
-        const plusMenu = document.getElementById('plusMenu');
-        const modelTrigger = document.getElementById('modelTrigger');
-        const modelMenu = document.getElementById('modelMenu');
-        
-        let isAIResponding = false;
-        let isMicOn = false;
+        // Intro Animation
+        window.onload = () => {
+            setTimeout(() => {
+                document.getElementById('intro-trigger').classList.add('reveal');
+                setTimeout(() => {
+                    const intro = document.getElementById('intro-screen');
+                    intro.style.opacity = '0';
+                    setTimeout(() => intro.remove(), 600);
+                }, 2200);
+            }, 400);
+        };
 
-        // Auto-resize input
-        input.addEventListener('input', () => {
-            input.style.height = 'auto';
-            input.style.height = input.scrollHeight + 'px';
-            
-            if (input.value.trim() !== "") {
-                actionBtn.classList.add('sendActive');
-                sendIcon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>`;
-                actionBtn.style.backgroundColor = 'white';
-                actionBtn.style.color = 'black';
-            } else {
-                actionBtn.classList.remove('sendActive');
-                sendIcon.innerHTML = `<path d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>`;
-                actionBtn.style.backgroundColor = '';
-                actionBtn.style.color = '';
-            }
-        });
+        // Theme Switcher (Auto + Manual)
+        const themeBtn = document.getElementById('theme-btn');
+        const themeIcon = document.getElementById('theme-icon');
+        
+        function setAutoTheme() {
+            const hours = new Date().getHours();
+            if (hours >= 18 || hours < 6) document.body.classList.add('dark-mode');
+        }
+        setAutoTheme();
+
+        themeBtn.onclick = () => {
+            document.body.classList.toggle('dark-mode');
+            themeIcon.innerHTML = document.body.classList.contains('dark-mode') ? 
+                '<path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m12.728 0l-.707-.707M6.343 6.343l-.707-.707M12 5a7 7 0 1 0 0 14 7 7 0 0 0 0-14z"/>' : 
+                '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
+        };
 
         // Toggle Menus
-        plusTrigger.onclick = (e) => { 
-            e.stopPropagation();
-            plusMenu.style.display = plusMenu.style.display === 'flex' ? 'none' : 'flex'; 
-        };
-        modelTrigger.onclick = (e) => { 
-            e.stopPropagation();
-            modelMenu.style.display = modelMenu.style.display === 'block' ? 'none' : 'block'; 
-        };
-        
-        document.onclick = () => {
-            plusMenu.style.display = 'none';
-            modelMenu.style.display = 'none';
-        };
-
-        function toggleMic() {
-            isMicOn = !isMicOn;
-            const micBtn = document.getElementById('micBtn');
-            if(isMicOn) micBtn.classList.add('listening');
-            else micBtn.classList.remove('listening');
+        function toggleElement(id) {
+            const el = document.getElementById(id);
+            const isHidden = window.getComputedStyle(el).display === 'none';
+            document.querySelectorAll('.premium-menu').forEach(m => m.style.display = 'none');
+            el.style.display = isHidden ? 'block' : 'none';
         }
 
-        function handleSend() {
-            if (input.value.trim() === "" && !isAIResponding) {
-                // Logic for "Dictate" button could go here
-                return;
+        // Input Behavior
+        const input = document.getElementById('main-input');
+        const sendBtn = document.getElementById('send-btn');
+        const welcome = document.getElementById('welcome-msg');
+        const topNew = document.getElementById('new-chat-top');
+        const topActive = document.getElementById('active-chat-top');
+
+        input.oninput = () => {
+            if (input.value.trim() !== "") {
+                sendBtn.classList.add('bg-white', 'text-black', 'shadow-lg');
+                sendBtn.innerHTML = '<svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>';
+            } else {
+                sendBtn.classList.remove('bg-white', 'text-black', 'shadow-lg');
+                sendBtn.innerHTML = '<svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M10 8l6 4-6 4V8z"/></svg>';
             }
+            input.style.height = "auto";
+            input.style.height = input.scrollHeight + "px";
+        };
 
-            if (isAIResponding) {
-                isAIResponding = false;
-                sendIcon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/>`;
-                return;
+        input.onkeydown = (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                if (input.value.trim() !== "") {
+                    welcome.classList.add('hidden');
+                    topNew.classList.add('hidden');
+                    topActive.classList.remove('hidden');
+                    input.value = "";
+                    input.style.height = "auto";
+                    input.dispatchEvent(new Event('input'));
+                }
             }
+        };
 
-            const text = input.value.trim();
-            emptyState.style.display = 'none';
-            
-            // Add User Message
-            addMessage('user', text);
-            input.value = '';
-            input.style.height = 'auto';
-            
-            // Simulate AI
-            isAIResponding = true;
-            sendIcon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z"/>`;
-            
-            setTimeout(() => {
-                addMessage('bot', "Processing your academic request with Genius 4.0...");
-                isAIResponding = false;
-                sendIcon.innerHTML = `<path d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>`;
-            }, 1000);
-        }
-
-        function addMessage(role, text) {
-            const div = document.createElement('div');
-            div.className = 'message-bubble';
-            const avatarColor = role === 'user' ? 'bg-blue-600' : 'bg-[#10a37f]';
-            const name = role === 'user' ? 'You' : 'StudyGenius Ultra';
-            
-            div.innerHTML = `
-                <div class="avatar ${avatarColor}">${role[0].toUpperCase()}</div>
-                <div class="flex-1">
-                    <div class="text-xs font-bold mb-1 text-gray-400 uppercase tracking-wider">${name}</div>
-                    <div class="text-gray-200 leading-relaxed">${text}</div>
-                </div>
-            `;
-            chatMessages.appendChild(div);
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-        }
-
-        function openTool(name) {
-            alert("Activating " + name + " Interface...");
-            input.value = "Activate " + name + " for my current topic";
-            input.dispatchEvent(new Event('input'));
-        }
+        // Click outside to close menus
+        window.onclick = (e) => {
+            if (!e.target.closest('.relative') && !e.target.closest('.input-wrapper')) {
+                document.querySelectorAll('.premium-menu').forEach(m => m.style.display = 'none');
+            }
+        };
     </script>
 </body>
 </html>
